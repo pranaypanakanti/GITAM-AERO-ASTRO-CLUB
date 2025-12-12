@@ -6,6 +6,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.UuidGenerator;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
 @Entity
 @Table(name = "users")
 @Data
@@ -17,7 +21,7 @@ public class User {
     @GeneratedValue
     @UuidGenerator(style = UuidGenerator.Style.RANDOM)
     @Column(columnDefinition = "uuid")
-    private String id;
+    private UUID id;
     @Column(name = "name", nullable = false)
     private String name;
     @Column(name = "email", nullable = false, unique = true)
@@ -42,4 +46,10 @@ public class User {
     private String linkedinUrl;
     @Column(name = "image_url")
     private String imageURL;
+    @Column(name = "team")
+    private String team;
+    @Column(name = "recruitmentStatus")
+    private String recruitmentStatus;
+    @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Blog> blogsList = new ArrayList<>();
 }
