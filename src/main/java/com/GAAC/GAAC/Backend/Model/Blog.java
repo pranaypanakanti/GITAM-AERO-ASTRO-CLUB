@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.UuidGenerator;
 
 import java.time.Instant;
+import java.util.UUID;
 
 @Entity
 @Data
@@ -18,7 +19,7 @@ public class Blog {
     @GeneratedValue
     @UuidGenerator(style = UuidGenerator.Style.RANDOM)
     @Column(columnDefinition = "uuid")
-    private String id;
+    private UUID id;
     @Column(name = "title", nullable = false)
     private String title;
     @Column(name = "content", columnDefinition = "text", nullable = false)
