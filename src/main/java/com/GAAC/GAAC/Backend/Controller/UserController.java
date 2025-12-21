@@ -1,15 +1,15 @@
 package com.GAAC.GAAC.Backend.Controller;
 
-import com.GAAC.GAAC.Backend.Model.User;
+import com.GAAC.GAAC.Backend.DTO.request.UserDetailsDTO;
+import com.GAAC.GAAC.Backend.DTO.response.ProfileResponseDTO;
 import com.GAAC.GAAC.Backend.Service.UserService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/user")
@@ -18,18 +18,20 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @GetMapping("/get-user-by-id/{id}")
-    public ResponseEntity<?> getUserById(@PathVariable UUID id){
-        User user = userService.getUserById(id);
-        if(user != null) return new ResponseEntity<>(user,HttpStatus.OK);
-        else return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    @GetMapping("/get-user-details")
+    public ResponseEntity<?> getUserById(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+        ProfileResponseDTO user = userService.getUserDTOByEmail(email);
+        return new ResponseEntity<>(user,HttpStatus.OK);
     }
 
     @PutMapping("/update-user")
-    public ResponseEntity<?> updateUser(@RequestBody User newUser){
+    public ResponseEntity<?> updateUser(@Valid @RequestBody UserDetailsDTO newUser){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
-        userService.updateUser(newUser,email);
+        boolean updated = userService.updateUser(newUser,email);
+        if(!updated) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

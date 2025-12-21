@@ -1,5 +1,6 @@
 package com.GAAC.GAAC.Backend.Model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -40,16 +41,17 @@ public class User {
     private String AASID;
     @Column(name = "role")
     private String role;
-    @Column(name = "github_url")
-    private String githubUrl;
     @Column(name = "linkedin_url")
     private String linkedinUrl;
     @Column(name = "image_url")
-    private String imageURL;
+    private String imageUrl;
     @Column(name = "team")
     private String team;
+    @Column(name = "position")
+    private String position;
     @Column(name = "recruitmentStatus")
     private String recruitmentStatus;
-    @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @JsonManagedReference
     private List<Blog> blogsList = new ArrayList<>();
 }

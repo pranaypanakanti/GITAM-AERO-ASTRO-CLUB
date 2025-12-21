@@ -1,5 +1,6 @@
 package com.GAAC.GAAC.Backend.Controller;
 
+import com.GAAC.GAAC.Backend.DTO.response.UserMiniResponseDTO;
 import com.GAAC.GAAC.Backend.Model.User;
 import com.GAAC.GAAC.Backend.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,28 +18,28 @@ public class AdminController {
     @Autowired
     private UserService userService;
 
-    @GetMapping("/get-all")
-    public ResponseEntity<?> getAll(){
-        List<User> users = userService.getAll();
+    @GetMapping("/get-all-users")
+    public ResponseEntity<?> getAllUsers(){
+        List<UserMiniResponseDTO> users = userService.getAllUsers();
         if(users.isEmpty()) return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
-    @PostMapping("/make-admin/{id}")
-    public ResponseEntity<?> makeAsAdmin(@RequestBody User user, @PathVariable UUID id){
-        userService.makeAsAdmin(user,id);
+    @PostMapping("/make-admin/{userId}")
+    public ResponseEntity<?> makeAsAdmin(@PathVariable UUID userId){
+        userService.makeAsAdmin(userId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @PostMapping("/make-member/{id}")
-    public ResponseEntity<?> makeAsMember(@RequestBody User user, @PathVariable UUID id){
-        userService.makeAsMember(user,id);
+    @PostMapping("/make-member/{userId}")
+    public ResponseEntity<?> makeAsMember(@PathVariable UUID userId){
+        userService.makeAsMember(userId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PostMapping("/make-user/{id}")
-    public ResponseEntity<?> makeAsUser(@RequestBody User user, @PathVariable UUID id){
-        userService.makeAsUser(user,id);
+    public ResponseEntity<?> makeAsUser(@PathVariable UUID userId){
+        userService.makeAsUser(userId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

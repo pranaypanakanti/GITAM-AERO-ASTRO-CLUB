@@ -1,10 +1,11 @@
 package com.GAAC.GAAC.Backend.Controller;
 
-import com.GAAC.GAAC.Backend.Model.Blog;
-import com.GAAC.GAAC.Backend.Model.User;
+import com.GAAC.GAAC.Backend.DTO.request.UserDetailsDTO;
+import com.GAAC.GAAC.Backend.DTO.response.BlogResponseDTO;
 import com.GAAC.GAAC.Backend.Service.BlogService;
 import com.GAAC.GAAC.Backend.Service.EmailService;
 import com.GAAC.GAAC.Backend.Service.UserService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -36,20 +37,21 @@ public class PublicController {
     }
 
     @PostMapping("/new-user")
-    public ResponseEntity<User> createNewUser(@RequestBody User myEntry){
+    public ResponseEntity<UserDetailsDTO> createNewUser(@Valid @RequestBody UserDetailsDTO myEntry){
         try{
             userService.saveNewUser(myEntry);
             return new ResponseEntity<>(myEntry, HttpStatus.CREATED);
         }catch (Exception e){
+            System.out.println(e);
             return new ResponseEntity<>(myEntry,HttpStatus.BAD_REQUEST);
         }
     }
 
-    @GetMapping("/get-all")
+    @GetMapping("/get-all-blogs")
     public ResponseEntity<?> getAllBlogs(){
-        List<Blog> blog = blogService.getAllBlogs();
-        if(blog != null && !blog.isEmpty()){
-            return new ResponseEntity<>(blog, HttpStatus.OK);
+        List<BlogResponseDTO> blogs = blogService.getAllBlogs();
+        if(blogs != null && !blogs.isEmpty()){
+            return new ResponseEntity<>(blogs, HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
