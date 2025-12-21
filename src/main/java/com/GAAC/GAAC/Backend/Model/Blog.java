@@ -1,5 +1,7 @@
 package com.GAAC.GAAC.Backend.Model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -25,7 +27,8 @@ public class Blog {
     @Column(name = "content", columnDefinition = "text", nullable = false)
     private String content;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "author_id", referencedColumnName = "id")
+    @JoinColumn(name = "author_id")
+    @JsonBackReference
     private User author;
     @Column(name="created_at", nullable=false)
     private Instant createdAt = Instant.now();

@@ -1,9 +1,12 @@
 package com.GAAC.GAAC.Backend.Controller;
 
+import com.GAAC.GAAC.Backend.DTO.request.BlogDetailsDTO;
+import com.GAAC.GAAC.Backend.DTO.response.BlogResponseDTO;
+import com.GAAC.GAAC.Backend.DTO.response.ProfileResponseDTO;
 import com.GAAC.GAAC.Backend.Model.Blog;
-import com.GAAC.GAAC.Backend.Model.User;
 import com.GAAC.GAAC.Backend.Service.BlogService;
 import com.GAAC.GAAC.Backend.Service.UserService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,8 +31,9 @@ public class BlogController {
     public ResponseEntity<?> getAllBlogsOfUser(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
-        User user = userService.getUserByEmail(email);
-        List<Blog> blogs = user.getBlogsList();
+        ProfileResponseDTO user = userService.getUserDTOByEmail(email);
+        if(user == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        List<BlogResponseDTO> blogs = user.getBlogsList();
         if(blogs != null && !blogs.isEmpty()){
             return new ResponseEntity<>(blogs,HttpStatus.OK);
         }
@@ -37,7 +41,7 @@ public class BlogController {
     }
 
     @PostMapping("/new-blog")
-    public ResponseEntity<Blog> createBlog(@RequestBody Blog myBlog){
+    public ResponseEntity<BlogDetailsDTO> createBlog(@Valid @RequestBody BlogDetailsDTO myBlog){
         try{
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             String email = authentication.getName();
@@ -49,20 +53,20 @@ public class BlogController {
     }
 
 
-    @DeleteMapping("/delete-by-id/{id}")
-    public ResponseEntity<?> deleteBlogById(@PathVariable UUID id){
-        Blog blog = blogService.getBlogById(id).orElse(null);
+    @DeleteMapping("/delete-by-id/{blogId}")
+    public ResponseEntity<?> deleteBlogById(@PathVariable UUID blogId){
+        Blog blog = blogService.getBlogById(blogId).orElse(null);
         if(blog == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
-        blogService.deleteBlogById(id,email);
+        blogService.deleteBlogById(blogId,email);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @PutMapping("/update-blog/{id}")
-    public ResponseEntity<?> updateBlogById(@PathVariable UUID id,
-                                                    @RequestBody Blog newBlog){
-        Blog old = blogService.getBlogById(id).orElse(null);
+    @PutMapping("/update-blog/{blogId}")
+    public ResponseEntity<?> updateBlogById(@PathVariable UUID blogId,
+                                                    @Valid @RequestBody BlogDetailsDTO newBlog){
+        Blog old = blogService.getBlogById(blogId).orElse(null);
         if(old != null){
             old.setTitle(newBlog.getTitle() != null && !newBlog.getTitle().isEmpty() ? newBlog.getTitle() : old.getTitle());
             old.setContent(newBlog.getContent() != null && !newBlog.getContent().isEmpty() ? newBlog.getContent() : old.getContent());
