@@ -22,14 +22,14 @@ public class Blog {
     @UuidGenerator(style = UuidGenerator.Style.RANDOM)
     @Column(columnDefinition = "uuid")
     private UUID id;
-    @Column(name = "title", nullable = false)
+    @Column(nullable = false)
     private String title;
-    @Column(name = "content", columnDefinition = "text", nullable = false)
+    @Column(columnDefinition = "text", nullable = false)
     private String content;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "author_id")
     @JsonBackReference
     private User author;
-    @Column(name="created_at", nullable=false)
+    @Column(nullable=false)
     private Instant createdAt = Instant.now();
 }

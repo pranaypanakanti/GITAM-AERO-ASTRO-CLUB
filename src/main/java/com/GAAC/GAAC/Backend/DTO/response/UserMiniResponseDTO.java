@@ -1,5 +1,6 @@
 package com.GAAC.GAAC.Backend.DTO.response;
 
+import com.GAAC.GAAC.Backend.ENUMS.TeamEnum;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -14,7 +15,7 @@ public class UserMiniResponseDTO {
     private String branch;
     private String yearOfStudy;
     private String AASID;
-    private String team;
+    private TeamEnum team;
     private String position;
     private String imageUrl;
     private String linkedinUrl;

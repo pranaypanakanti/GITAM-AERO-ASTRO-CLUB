@@ -1,5 +1,8 @@
 package com.GAAC.GAAC.Backend.DTO.request;
 
+import com.GAAC.GAAC.Backend.ENUMS.PositionEnum;
+import com.GAAC.GAAC.Backend.ENUMS.RoleEnum;
+import com.GAAC.GAAC.Backend.ENUMS.TeamEnum;
 import lombok.Getter;
 import lombok.Setter;
 import jakarta.validation.constraints.Pattern;
@@ -21,21 +24,9 @@ public class UserDetailsDTO {
     private String mobileNumber;
     private String yearOfStudy;
     private String AASID;
-    @Pattern(
-            regexp = "USER|MEMBER|ADMIN",
-            message = "Team must be USER or MEMBER OR ADMIN"
-    )
-    private String role;
-    @Pattern(
-            regexp = "PROGRAMMERS|STARGAZERS|ROBUSTA|CORE|EB",
-            message = "Team must be PROGRAMMERS or STARGAZERS or ROBUSTA or CORE or EB"
-    )
-    private String team;
-    @Pattern(
-            regexp = "PRESIDENT|VICE PRESIDENT|SECRETARY|LEAD|MEMBER",
-            message = "Team must be PRESIDENT or VICE PRESIDENT or SECRETARY or LEAD or MEMBER"
-    )
-    private String position;
+    private RoleEnum role;
+    private TeamEnum team;
+    private PositionEnum position;
     private String imageURL;
     private String linkedinUrl;
 }

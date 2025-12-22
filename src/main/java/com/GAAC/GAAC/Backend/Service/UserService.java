@@ -3,6 +3,7 @@ package com.GAAC.GAAC.Backend.Service;
 import com.GAAC.GAAC.Backend.DTO.request.UserDetailsDTO;
 import com.GAAC.GAAC.Backend.DTO.response.ProfileResponseDTO;
 import com.GAAC.GAAC.Backend.DTO.response.UserMiniResponseDTO;
+import com.GAAC.GAAC.Backend.ENUMS.RoleEnum;
 import com.GAAC.GAAC.Backend.Mapper.UserMapper;
 import com.GAAC.GAAC.Backend.Model.User;
 import com.GAAC.GAAC.Backend.Repository.UserRepo;
@@ -27,7 +28,7 @@ public class UserService {
 
     public void saveNewUser(UserDetailsDTO user){
         User newUser = new User();
-        newUser.setRole("USER");
+        newUser.setRole(RoleEnum.USER);
         newUser.setName(user.getName());
         newUser.setCollegeId(user.getCollegeId());
         newUser.setBranch(user.getBranch());
@@ -52,8 +53,8 @@ public class UserService {
         oldUser.setAASID(newUser.getAASID() != null && !newUser.getAASID().isEmpty() ? newUser.getAASID() : oldUser.getAASID());
         oldUser.setLinkedinUrl(newUser.getLinkedinUrl() != null && !newUser.getLinkedinUrl().isEmpty() ? newUser.getLinkedinUrl() : oldUser.getLinkedinUrl());
         oldUser.setImageUrl(newUser.getImageURL() != null && !newUser.getImageURL().isEmpty() ? newUser.getImageURL() : oldUser.getImageUrl());
-        oldUser.setTeam(newUser.getTeam() != null && !newUser.getTeam().isEmpty() ? newUser.getTeam() : oldUser.getTeam());
-        oldUser.setPosition(newUser.getPosition() != null && !newUser.getPosition().isEmpty() ? newUser.getPosition() : oldUser.getPosition());
+        oldUser.setTeam(newUser.getTeam() != null ? newUser.getTeam() : oldUser.getTeam());
+        oldUser.setPosition(newUser.getPosition() != null? newUser.getPosition() : oldUser.getPosition());
         userRepo.save(oldUser);
         return true;
     }
@@ -65,7 +66,7 @@ public class UserService {
     public void makeAsAdmin(UUID id) {
         User oldUser = userRepo.findById(id).orElse(null);
         if(oldUser != null) {
-            oldUser.setRole("ADMIN");
+            oldUser.setRole(RoleEnum.ADMIN);
             userRepo.save(oldUser);
         }else{
             throw new RuntimeException("User not found");
@@ -75,7 +76,7 @@ public class UserService {
     public void makeAsMember(UUID id) {
         User oldUser = userRepo.findById(id).orElse(null);
         if(oldUser != null) {
-            oldUser.setRole("MEMBER");
+            oldUser.setRole(RoleEnum.MEMBER);
             userRepo.save(oldUser);
         }else{
             throw new RuntimeException("User not found");
@@ -85,7 +86,7 @@ public class UserService {
     public void makeAsUser(UUID id) {
         User oldUser = userRepo.findById(id).orElse(null);
         if(oldUser != null) {
-            oldUser.setRole("USER");
+            oldUser.setRole(RoleEnum.USER);
             userRepo.save(oldUser);
         }else{
             throw new RuntimeException("User not found");
