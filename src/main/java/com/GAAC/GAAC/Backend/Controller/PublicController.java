@@ -2,6 +2,7 @@ package com.GAAC.GAAC.Backend.Controller;
 
 import com.GAAC.GAAC.Backend.DTO.request.UserDetailsDTO;
 import com.GAAC.GAAC.Backend.DTO.response.BlogResponseDTO;
+import com.GAAC.GAAC.Backend.ENUMS.TeamEnum;
 import com.GAAC.GAAC.Backend.Service.BlogService;
 import com.GAAC.GAAC.Backend.Service.EmailService;
 import com.GAAC.GAAC.Backend.Service.UserService;
@@ -36,7 +37,7 @@ public class PublicController {
         return "Positive";
     }
 
-    @PostMapping("/new-user")
+    @PostMapping("/new-profile")
     public ResponseEntity<UserDetailsDTO> createNewUser(@Valid @RequestBody UserDetailsDTO myEntry){
         try{
             userService.saveNewUser(myEntry);
@@ -55,4 +56,9 @@ public class PublicController {
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
+
+//    @GetMapping("/get-team-members")
+//    public ResponseEntity<?> getTeamMembers(@PathVariable TeamEnum teamName){
+//
+//    }
 }

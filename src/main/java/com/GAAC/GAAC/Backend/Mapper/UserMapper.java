@@ -18,9 +18,9 @@ public class UserMapper {
         dto.setYearOfStudy(user.getYearOfStudy());
         dto.setAASID(user.getAASID());
         dto.setLinkedinUrl(user.getLinkedinUrl());
-        dto.setRole(user.getRole());
+        dto.setRole(user.getRole().name());
         dto.setTeam(user.getTeam());
-        dto.setPosition(user.getPosition());
+        dto.setPosition(user.getPosition().name());
         dto.setImageUrl(user.getImageUrl());
         List<BlogResponseDTO> blogs = user.getBlogsList().stream().map(blog -> {
             BlogResponseDTO b = new BlogResponseDTO();
@@ -44,7 +44,7 @@ public class UserMapper {
         dto.setAASID(user.getAASID());
         dto.setLinkedinUrl(user.getLinkedinUrl());
         dto.setTeam(user.getTeam());
-        dto.setPosition(user.getPosition());
+        dto.setPosition(user.getPosition().name());
         dto.setImageUrl(user.getImageUrl());
         return dto;
     }

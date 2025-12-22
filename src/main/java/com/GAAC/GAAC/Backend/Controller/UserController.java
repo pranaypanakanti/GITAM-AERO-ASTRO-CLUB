@@ -18,7 +18,7 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @GetMapping("/get-user-details")
+    @GetMapping("/profile")
     public ResponseEntity<?> getUserById(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
@@ -26,7 +26,7 @@ public class UserController {
         return new ResponseEntity<>(user,HttpStatus.OK);
     }
 
-    @PutMapping("/update-user")
+    @PutMapping("/update-profile")
     public ResponseEntity<?> updateUser(@Valid @RequestBody UserDetailsDTO newUser){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
@@ -35,7 +35,7 @@ public class UserController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @DeleteMapping("/delete-user")
+    @DeleteMapping("/delete-profile")
     public ResponseEntity<?> deleteUser(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();

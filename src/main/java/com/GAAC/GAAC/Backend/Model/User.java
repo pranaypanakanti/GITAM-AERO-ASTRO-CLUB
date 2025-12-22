@@ -1,5 +1,9 @@
 package com.GAAC.GAAC.Backend.Model;
 
+import com.GAAC.GAAC.Backend.ENUMS.PositionEnum;
+import com.GAAC.GAAC.Backend.ENUMS.RecruitmentStatusEnum;
+import com.GAAC.GAAC.Backend.ENUMS.RoleEnum;
+import com.GAAC.GAAC.Backend.ENUMS.TeamEnum;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -23,34 +27,28 @@ public class User {
     @UuidGenerator(style = UuidGenerator.Style.RANDOM)
     @Column(columnDefinition = "uuid")
     private UUID id;
-    @Column(name = "name", nullable = false)
+    @Column(nullable = false)
     private String name;
-    @Column(name = "email", nullable = false, unique = true)
+    @Column(nullable = false, unique = true)
     private String email;
-    @Column(name = "collegeId", nullable = false)
+    @Column(nullable = false)
     private String collegeId;
-    @Column(name = "password", nullable = false)
+    @Column(nullable = false)
     private String password;
-    @Column(name = "branch")
     private String branch;
-    @Column(name = "mobileNumber")
     private String mobileNumber;
-    @Column(name = "yearOfStudy")
     private String yearOfStudy;
-    @Column(name = "AASID")
     private String AASID;
-    @Column(name = "role")
-    private String role;
-    @Column(name = "linkedin_url")
+    @Enumerated(EnumType.STRING)
+    private RoleEnum role;
     private String linkedinUrl;
-    @Column(name = "image_url")
     private String imageUrl;
-    @Column(name = "team")
-    private String team;
-    @Column(name = "position")
-    private String position;
-    @Column(name = "recruitmentStatus")
-    private String recruitmentStatus;
+    @Enumerated(EnumType.STRING)
+    private TeamEnum team;
+    @Enumerated(EnumType.STRING)
+    private PositionEnum position;
+    @Enumerated(EnumType.STRING)
+    private RecruitmentStatusEnum recruitmentStatus;
     @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @JsonManagedReference
     private List<Blog> blogsList = new ArrayList<>();
