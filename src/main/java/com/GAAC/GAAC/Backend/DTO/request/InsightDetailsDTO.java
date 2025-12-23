@@ -7,9 +7,8 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class BlogDetailsDTO {
+public class InsightDetailsDTO {
     @NotBlank
     private String title;
     private String content;
-    private TeamEnum team;
 }

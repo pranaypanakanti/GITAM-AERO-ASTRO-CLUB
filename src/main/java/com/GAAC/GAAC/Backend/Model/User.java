@@ -27,14 +27,12 @@ public class User {
     @UuidGenerator(style = UuidGenerator.Style.RANDOM)
     @Column(columnDefinition = "uuid")
     private UUID id;
-    @Column(nullable = false)
     private String name;
     @Column(nullable = false, unique = true)
     private String email;
     @Column(nullable = false)
-    private String collegeId;
-    @Column(nullable = false)
     private String password;
+    private String collegeId;
     private String branch;
     private String mobileNumber;
     private String yearOfStudy;
@@ -42,6 +40,7 @@ public class User {
     @Enumerated(EnumType.STRING)
     private RoleEnum role;
     private String linkedinUrl;
+    private String description;
     private String imageUrl;
     @Enumerated(EnumType.STRING)
     private TeamEnum team;
@@ -52,4 +51,7 @@ public class User {
     @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @JsonManagedReference
     private List<Blog> blogsList = new ArrayList<>();
+    @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @JsonManagedReference
+    private List<Insight> insightList = new ArrayList<>();
 }

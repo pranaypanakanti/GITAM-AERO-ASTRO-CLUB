@@ -1,5 +1,7 @@
 package com.GAAC.GAAC.Backend.DTO.response;
 
+import com.GAAC.GAAC.Backend.ENUMS.PositionEnum;
+import com.GAAC.GAAC.Backend.ENUMS.RoleEnum;
 import com.GAAC.GAAC.Backend.ENUMS.TeamEnum;
 import lombok.Getter;
 import lombok.Setter;
@@ -18,10 +20,12 @@ public class ProfileResponseDTO {
     private String mobileNumber;
     private String yearOfStudy;
     private String AASID;
-    private String role;
+    private RoleEnum role;
     private TeamEnum team;
-    private String position;
+    private PositionEnum position;
+    private String description;
     private String imageUrl;
     private String linkedinUrl;
     private List<BlogResponseDTO> blogsList;
+    private List<InsightResponseDTO> insightList;
 }

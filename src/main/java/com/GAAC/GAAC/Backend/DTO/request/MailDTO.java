@@ -7,14 +7,11 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class UserSighInDTO {
+public class MailDTO {
     @NotBlank
     @Pattern(
             regexp = "^[a-zA-Z0-9._%+-]+@(gitam\\.in|gitam\\.edu|student\\.edu)$",
             message = "Invalid email format, use collage email id only."
     )
     private String email;
-    @NotBlank
-    private String password;
-    private String otp;
 }

@@ -3,6 +3,7 @@ package com.GAAC.GAAC.Backend.DTO.request;
 import com.GAAC.GAAC.Backend.ENUMS.PositionEnum;
 import com.GAAC.GAAC.Backend.ENUMS.RoleEnum;
 import com.GAAC.GAAC.Backend.ENUMS.TeamEnum;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
 import jakarta.validation.constraints.Pattern;
@@ -10,7 +11,9 @@ import jakarta.validation.constraints.Pattern;
 @Getter
 @Setter
 public class UserDetailsDTO {
+    @NotBlank
     private String name;
+    @NotBlank
     @Pattern(
             regexp = "^[0-9]{10}$",
             message = "Collage id must contain exactly 10 digits"
@@ -23,6 +26,7 @@ public class UserDetailsDTO {
     )
     private String mobileNumber;
     private String yearOfStudy;
+    private String description;
     private String AASID;
     private RoleEnum role;
     private TeamEnum team;
