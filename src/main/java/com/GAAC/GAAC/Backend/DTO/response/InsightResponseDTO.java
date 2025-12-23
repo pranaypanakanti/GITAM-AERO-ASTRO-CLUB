@@ -1,7 +1,6 @@
 package com.GAAC.GAAC.Backend.DTO.response;
 
 import com.GAAC.GAAC.Backend.ENUMS.TeamEnum;
-import com.GAAC.GAAC.Backend.Model.User;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -10,11 +9,10 @@ import java.util.UUID;
 
 @Getter
 @Setter
-public class BlogResponseDTO {
+public class InsightResponseDTO {
     private UUID id;
     private String title;
     private String content;
-    private TeamEnum team;
     private Instant createdAt;
     private String authorName;
 }

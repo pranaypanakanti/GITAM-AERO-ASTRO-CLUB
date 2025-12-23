@@ -1,7 +1,11 @@
 package com.GAAC.GAAC.Backend.Controller;
 
+import com.GAAC.GAAC.Backend.Configuration.OtpEncoder;
+import com.GAAC.GAAC.Backend.DTO.request.MailDTO;
 import com.GAAC.GAAC.Backend.DTO.request.UserDetailsDTO;
+import com.GAAC.GAAC.Backend.DTO.request.UserSighInDTO;
 import com.GAAC.GAAC.Backend.DTO.response.BlogResponseDTO;
+import com.GAAC.GAAC.Backend.DTO.response.UserMiniResponseDTO;
 import com.GAAC.GAAC.Backend.ENUMS.TeamEnum;
 import com.GAAC.GAAC.Backend.Service.BlogService;
 import com.GAAC.GAAC.Backend.Service.EmailService;
@@ -27,24 +31,55 @@ public class PublicController {
     @Autowired
     private EmailService emailService;
 
-    @GetMapping("/send-mail")
-    public void sendMail(){
-        emailService.sendEmail("garagadharma24@gmail.com","Gentle Remainder from Pranay","Late ayindhi padukora pu..");
-    }
+    @Autowired
+    private OtpEncoder optEncoder;
 
-    @GetMapping("/health-check")
-    public String healthCheck(){
-        return "Positive";
-    }
-
-    @PostMapping("/new-profile")
-    public ResponseEntity<UserDetailsDTO> createNewUser(@Valid @RequestBody UserDetailsDTO myEntry){
+    @GetMapping("/login")
+    public ResponseEntity<?> login(@Valid @RequestBody UserSighInDTO user){
         try{
-            userService.saveNewUser(myEntry);
-            return new ResponseEntity<>(myEntry, HttpStatus.CREATED);
-        }catch (Exception e){
-            System.out.println(e);
-            return new ResponseEntity<>(myEntry,HttpStatus.BAD_REQUEST);
+            userService.login(user);
+            return new ResponseEntity<>(user, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(user,HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping("/send-otp")
+    public ResponseEntity<?> sendOtp(@Valid @RequestBody MailDTO emailDTO){
+        String userEmail = emailDTO.getEmail(); // The recipient
+        String otp = optEncoder.otpEncoder(userEmail);// Your generated OTP
+
+        String subject = "Verify Your Account - GITAM Aero Astro Club \uD83D\uDE80";
+
+        String body = "Welcome to the Skies!\n" +
+                "Hello,\n\n" +
+                "Thank you for joining the GITAM Aero Astro Club! We are excited to have you on board.\n\n" +
+                "To complete your registration, please use the following One-Time Password (OTP):\n\n" +
+                "OTP: " + otp + "\n\n" +
+                "This code is valid for the next 10 minutes. Please do not share this code with anyone.\n\n" +
+                "Team GAAC\n";
+
+        emailService.sendEmail(userEmail, subject, body);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PostMapping("/sign-in")
+    public ResponseEntity<?> signIn(@Valid @RequestBody UserSighInDTO user){
+        try{
+            userService.signIn(user);
+            return new ResponseEntity<>(user, HttpStatus.CREATED);
+        } catch (Exception e) {
+            return new ResponseEntity<>(user,HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PostMapping("/forget-password")
+    public ResponseEntity<?> forgetPassword(@Valid @RequestBody UserSighInDTO user){
+        try{
+            userService.forgetPassword(user);
+            return new ResponseEntity<>(user, HttpStatus.OK);
+        }catch (Exception e) {
+            return new ResponseEntity<>(user,HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -57,8 +92,15 @@ public class PublicController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-//    @GetMapping("/get-team-members")
-//    public ResponseEntity<?> getTeamMembers(@PathVariable TeamEnum teamName){
-//
-//    }
+    @GetMapping("/get-team-members/{teamName}")
+    public ResponseEntity<?> getTeamMembers(@PathVariable TeamEnum teamName){
+        List<UserMiniResponseDTO> teamMembers = userService.getTeamMembers(teamName);
+        return new ResponseEntity<>(teamMembers,HttpStatus.OK);
+    }
+
+    @GetMapping("/health-check")
+    public String healthCheck(){
+        return "Positive";
+    }
+
 }

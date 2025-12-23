@@ -1,7 +1,9 @@
 package com.GAAC.GAAC.Backend.Controller;
 
 import com.GAAC.GAAC.Backend.DTO.response.UserMiniResponseDTO;
+import com.GAAC.GAAC.Backend.ENUMS.RoleEnum;
 import com.GAAC.GAAC.Backend.Model.User;
+import com.GAAC.GAAC.Backend.Service.EmailService;
 import com.GAAC.GAAC.Backend.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,6 +20,9 @@ public class AdminController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private EmailService emailService;
+
     @GetMapping("/get-all-users")
     public ResponseEntity<?> getAllUsers(){
         List<UserMiniResponseDTO> users = userService.getAllUsers();
@@ -25,21 +30,14 @@ public class AdminController {
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
-    @PostMapping("/make-admin/{userId}")
-    public ResponseEntity<?> makeAsAdmin(@PathVariable UUID userId){
-        userService.makeAsAdmin(userId);
+    @GetMapping("/change-role/{role}/{userId}")
+    public ResponseEntity<?> changeRole(@PathVariable RoleEnum role, @PathVariable UUID userId){
+        userService.changeRole(role,userId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @PostMapping("/make-member/{userId}")
-    public ResponseEntity<?> makeAsMember(@PathVariable UUID userId){
-        userService.makeAsMember(userId);
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
-
-    @PostMapping("/make-user/{id}")
-    public ResponseEntity<?> makeAsUser(@PathVariable UUID userId){
-        userService.makeAsUser(userId);
-        return new ResponseEntity<>(HttpStatus.OK);
+    @GetMapping("/send-mail")
+    public void sendMail(){
+        emailService.sendEmail("garagadharma24@gmail.com","Gentle Remainder from Pranay","Late ayindhi padukora pu..");
     }
 }

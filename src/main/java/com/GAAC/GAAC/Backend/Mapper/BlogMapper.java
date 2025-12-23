@@ -9,8 +9,11 @@ public class BlogMapper {
         dto.setId(blog.getId());
         dto.setTitle(blog.getTitle());
         dto.setContent(blog.getContent());
+        dto.setTeam(blog.getTeam());
         dto.setCreatedAt(blog.getCreatedAt());
-        dto.setAuthor(blog.getAuthor());
+        dto.setAuthorName(
+                blog.getAuthor() != null ? blog.getAuthor().getName() : "Unknown"
+        );
         return dto;
     }
 }

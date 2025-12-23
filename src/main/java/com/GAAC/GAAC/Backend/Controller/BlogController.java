@@ -53,7 +53,7 @@ public class BlogController {
     }
 
 
-    @DeleteMapping("/delete-by-id/{blogId}")
+    @DeleteMapping("/delete-blog/{blogId}")
     public ResponseEntity<?> deleteBlogById(@PathVariable UUID blogId){
         Blog blog = blogService.getBlogById(blogId).orElse(null);
         if(blog == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -66,13 +66,7 @@ public class BlogController {
     @PutMapping("/update-blog/{blogId}")
     public ResponseEntity<?> updateBlogById(@PathVariable UUID blogId,
                                                     @Valid @RequestBody BlogDetailsDTO newBlog){
-        Blog old = blogService.getBlogById(blogId).orElse(null);
-        if(old != null){
-            old.setTitle(newBlog.getTitle() != null && !newBlog.getTitle().isEmpty() ? newBlog.getTitle() : old.getTitle());
-            old.setContent(newBlog.getContent() != null && !newBlog.getContent().isEmpty() ? newBlog.getContent() : old.getContent());
-            blogService.saveBlog(old);
+            blogService.updateBlogById(blogId,newBlog);
             return new ResponseEntity<>(HttpStatus.OK);
-        }
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 }

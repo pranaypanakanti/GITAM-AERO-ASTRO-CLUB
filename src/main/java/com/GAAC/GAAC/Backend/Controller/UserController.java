@@ -1,6 +1,7 @@
 package com.GAAC.GAAC.Backend.Controller;
 
 import com.GAAC.GAAC.Backend.DTO.request.UserDetailsDTO;
+import com.GAAC.GAAC.Backend.DTO.request.UserSighInDTO;
 import com.GAAC.GAAC.Backend.DTO.response.ProfileResponseDTO;
 import com.GAAC.GAAC.Backend.Service.UserService;
 import jakarta.validation.Valid;
@@ -17,6 +18,29 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+
+    @PostMapping("/change-password")
+    public ResponseEntity<?> changePassword(@Valid @RequestBody UserSighInDTO user){
+        try{
+            userService.changePassword(user);
+            return new ResponseEntity<>(user, HttpStatus.OK);
+        }catch (Exception e) {
+            return new ResponseEntity<>(user,HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PostMapping("/new-profile")
+    public ResponseEntity<UserDetailsDTO> createNewUser(@Valid @RequestBody UserDetailsDTO user){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+        try{
+            userService.saveNewUser(email,user);
+            return new ResponseEntity<>(user, HttpStatus.CREATED);
+        }catch (Exception e){
+            System.out.println(e);
+            return new ResponseEntity<>(user,HttpStatus.BAD_REQUEST);
+        }
+    }
 
     @GetMapping("/profile")
     public ResponseEntity<?> getUserById(){

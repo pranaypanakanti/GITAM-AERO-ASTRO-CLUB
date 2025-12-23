@@ -2,7 +2,6 @@ package com.GAAC.GAAC.Backend.Model;
 
 import com.GAAC.GAAC.Backend.ENUMS.TeamEnum;
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -16,7 +15,7 @@ import java.util.UUID;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Blog {
+public class Insight {
 
     @Id
     @GeneratedValue
@@ -27,8 +26,6 @@ public class Blog {
     private String title;
     @Column(columnDefinition = "text", nullable = false)
     private String content;
-    @Enumerated(EnumType.STRING)
-    private TeamEnum team;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "author_id")
     @JsonBackReference

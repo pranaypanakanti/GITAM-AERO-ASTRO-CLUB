@@ -2,7 +2,7 @@ spring:
   application:
     name: GAAC-Backend
   datasource:
-    url: jdbc:postgresql://aws-1-ap-northeast-1.pooler.supabase.com:6543/postgres?sslmode=require
+    url: jdbc:postgresql://aws-1-ap-northeast-1.pooler.supabase.com:6543/postgres?prepareThreshold=0
     username: postgres.dcrxulsragjqcclnoqdd
     password: "!fixucs9J#BDZSL"
     driver-class-name: org.postgresql.Driver
@@ -12,6 +12,8 @@ spring:
       minimum-idle: 2
       idle-timeout: 300000
       connection-timeout: 30000
+      data-source-properties:
+        prepareThreshold: 0
 
   jpa:
     hibernate:
@@ -20,6 +22,8 @@ spring:
     properties:
       hibernate:
         format_sql: true
+        jdbc:
+          use_get_generated_keys: false
     open-in-view: false
 
   mail:
@@ -33,3 +37,9 @@ spring:
           auth: true
           starttls:
             enable: true
+
+logging:
+  level:
+    org:
+      springframework:
+        security: DEBUG
