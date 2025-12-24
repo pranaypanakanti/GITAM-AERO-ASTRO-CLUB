@@ -3,7 +3,10 @@ package com.GAAC.GAAC.Backend.Service;
 
 import com.GAAC.GAAC.Backend.DTO.request.BlogDetailsDTO;
 import com.GAAC.GAAC.Backend.DTO.response.BlogResponseDTO;
+import com.GAAC.GAAC.Backend.DTO.response.UserMiniResponseDTO;
+import com.GAAC.GAAC.Backend.ENUMS.TeamEnum;
 import com.GAAC.GAAC.Backend.Mapper.BlogMapper;
+import com.GAAC.GAAC.Backend.Mapper.UserMapper;
 import com.GAAC.GAAC.Backend.Model.Blog;
 import com.GAAC.GAAC.Backend.Model.User;
 import com.GAAC.GAAC.Backend.Repository.BlogRepo;
@@ -42,6 +45,13 @@ public class BlogService {
 
     public List<BlogResponseDTO> getAllBlogs() {
         return blogRepo.findAll()
+                .stream()
+                .map(BlogMapper::toBlogResponse)
+                .toList();
+    }
+
+    public List<BlogResponseDTO> getTeamBlogs(TeamEnum teamName) {
+        return blogRepo.findByTeam(teamName)
                 .stream()
                 .map(BlogMapper::toBlogResponse)
                 .toList();
