@@ -5,10 +5,12 @@ import com.GAAC.GAAC.Backend.DTO.request.MailDTO;
 import com.GAAC.GAAC.Backend.DTO.request.UserDetailsDTO;
 import com.GAAC.GAAC.Backend.DTO.request.UserSighInDTO;
 import com.GAAC.GAAC.Backend.DTO.response.BlogResponseDTO;
+import com.GAAC.GAAC.Backend.DTO.response.InsightResponseDTO;
 import com.GAAC.GAAC.Backend.DTO.response.UserMiniResponseDTO;
 import com.GAAC.GAAC.Backend.ENUMS.TeamEnum;
 import com.GAAC.GAAC.Backend.Service.BlogService;
 import com.GAAC.GAAC.Backend.Service.EmailService;
+import com.GAAC.GAAC.Backend.Service.InsightService;
 import com.GAAC.GAAC.Backend.Service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +29,9 @@ public class PublicController {
 
     @Autowired
     private BlogService blogService;
+
+    @Autowired
+    private InsightService insightService;
 
     @Autowired
     private EmailService emailService;
@@ -90,6 +95,21 @@ public class PublicController {
             return new ResponseEntity<>(blogs, HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    @GetMapping("/get-all-insights")
+    public ResponseEntity<?> getAllInsights(){
+        List<InsightResponseDTO> insights = insightService.getAllInsights();
+        if(insights != null && !insights.isEmpty()){
+            return new ResponseEntity<>(insights, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    @GetMapping("/get-team-blogs/{teamName}")
+    public ResponseEntity<?> getTeamBlogs(@PathVariable TeamEnum teamName){
+        List<BlogResponseDTO> teamBlogs = blogService.getTeamBlogs(teamName);
+        return new ResponseEntity<>(teamBlogs,HttpStatus.OK);
     }
 
     @GetMapping("/get-team-members/{teamName}")
