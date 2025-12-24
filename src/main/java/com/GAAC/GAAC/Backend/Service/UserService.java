@@ -89,9 +89,9 @@ public class UserService {
         userRepo.save(newUser);
     }
 
-    public boolean updateUser(UserDetailsDTO newUser, String email){
+    public void updateUser(UserDetailsDTO newUser, String email){
         User oldUser = userRepo.findByEmail(email).orElse(null);
-        if(oldUser == null) return false;
+        if(oldUser == null) throw new RuntimeException("User not found");
         oldUser.setName(newUser.getName() != null && !newUser.getName().isEmpty() ? newUser.getName() : oldUser.getName());
         oldUser.setCollegeId(newUser.getCollegeId() != null && !newUser.getCollegeId().isEmpty() ? newUser.getCollegeId() : oldUser.getCollegeId());
         oldUser.setBranch(newUser.getBranch() != null && !newUser.getBranch().isEmpty() ? newUser.getBranch() : oldUser.getBranch());
@@ -104,7 +104,6 @@ public class UserService {
         oldUser.setTeam(newUser.getTeam() != null ? newUser.getTeam() : oldUser.getTeam());
         oldUser.setPosition(newUser.getPosition() != null? newUser.getPosition() : oldUser.getPosition());
         userRepo.save(oldUser);
-        return true;
     }
 
     public void saveUser(User user){
@@ -114,12 +113,14 @@ public class UserService {
     @PreAuthorize("hasRole('ADMIN')")
     public void changeRole(RoleEnum role, UUID id) {
         User oldUser = userRepo.findById(id).orElse(null);
-        if(oldUser != null) {
-            oldUser.setRole(role);
-            userRepo.save(oldUser);
-        }else{
-            throw new RuntimeException("User not found");
+        if(oldUser == null) throw new RuntimeException("User not found");
+        if(role.equals(oldUser.getRole())) throw new RuntimeException("Already a "+ role.toString());
+        if(oldUser.getRole().equals(RoleEnum.ADMIN)) {
+            List<User> users = userRepo.findByRole(role);
+            if(users.size() <= 1) throw new RuntimeException("Minimum one Admin is required.");
         }
+        oldUser.setRole(role);
+        userRepo.save(oldUser);
     }
 
     @PreAuthorize("hasRole('ADMIN')")
@@ -142,11 +143,6 @@ public class UserService {
         return user;
     }
 
-    public void deleteUserByEmail(String email){
-        User user = userRepo.findByEmail(email).orElse(null);
-        if(user == null) throw new RuntimeException("User not found");
-        userRepo.deleteByEmail(email);
-    }
 
     public List<UserMiniResponseDTO> getTeamMembers(TeamEnum teamName) {
         return userRepo.findByTeam(teamName)
@@ -155,4 +151,24 @@ public class UserService {
                 .toList();
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
+    public List<UserMiniResponseDTO> getRoleMembers(RoleEnum roleName) {
+        return userRepo.findByRole(roleName)
+                .stream()
+                .map(UserMapper::toUserMiniResponse)
+                .toList();
+    }
+
+    public void deleteUserByEmail(String email){
+        User user = userRepo.findByEmail(email).orElse(null);
+        if(user == null) throw new RuntimeException("User not found");
+        userRepo.deleteByEmail(email);
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    public void deleteUserById(UUID userId) {
+        User user = userRepo.findById(userId).orElse(null);
+        if(user == null) throw new RuntimeException("User not found");
+        userRepo.deleteById(userId);
+    }
 }

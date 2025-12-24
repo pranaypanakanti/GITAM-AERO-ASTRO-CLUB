@@ -33,6 +33,8 @@ public class BlogService {
 
     @PreAuthorize("hasAnyRole('ADMIN','MEMBER')")
     public void saveBlog(BlogDetailsDTO blog, String email) {
+        Blog duplicate = blogRepo.findByTitle(blog.getTitle()).orElse(null);
+        if(duplicate != null && duplicate.getContent().equals(blog.getContent())) throw new RuntimeException("Blog already exists");
         User user = userService.getUserByEmail(email);
         Blog newBlog = new Blog();
         newBlog.setAuthor(user);

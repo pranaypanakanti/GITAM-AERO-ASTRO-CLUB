@@ -25,7 +25,7 @@ public class UserController {
             userService.changePassword(user);
             return new ResponseEntity<>(user, HttpStatus.OK);
         }catch (Exception e) {
-            return new ResponseEntity<>(user,HttpStatus.BAD_REQUEST);
+            throw new RuntimeException(e.getMessage());
         }
     }
 
@@ -37,33 +37,43 @@ public class UserController {
             userService.saveNewUser(email,user);
             return new ResponseEntity<>(user, HttpStatus.CREATED);
         }catch (Exception e){
-            System.out.println(e);
             return new ResponseEntity<>(user,HttpStatus.BAD_REQUEST);
         }
     }
 
     @GetMapping("/profile")
     public ResponseEntity<?> getUserById(){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String email = authentication.getName();
-        ProfileResponseDTO user = userService.getUserDTOByEmail(email);
-        return new ResponseEntity<>(user,HttpStatus.OK);
+        try {
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            String email = authentication.getName();
+            ProfileResponseDTO user = userService.getUserDTOByEmail(email);
+            return new ResponseEntity<>(user,HttpStatus.OK);
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
+        }
     }
 
     @PutMapping("/update-profile")
     public ResponseEntity<?> updateUser(@Valid @RequestBody UserDetailsDTO newUser){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String email = authentication.getName();
-        boolean updated = userService.updateUser(newUser,email);
-        if(!updated) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        return new ResponseEntity<>(HttpStatus.OK);
+        try{
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            String email = authentication.getName();
+            userService.updateUser(newUser,email);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
+        }
     }
 
     @DeleteMapping("/delete-profile")
     public ResponseEntity<?> deleteUser(){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String email = authentication.getName();
-        userService.deleteUserByEmail(email);
-        return new ResponseEntity<>(HttpStatus.OK);
+        try{
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            String email = authentication.getName();
+            userService.deleteUserByEmail(email);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
+        }
     }
 }

@@ -29,15 +29,18 @@ public class BlogController {
 
     @GetMapping("/get-by-user")
     public ResponseEntity<?> getAllBlogsOfUser(){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String email = authentication.getName();
-        ProfileResponseDTO user = userService.getUserDTOByEmail(email);
-        if(user == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        List<BlogResponseDTO> blogs = user.getBlogsList();
-        if(blogs != null && !blogs.isEmpty()){
-            return new ResponseEntity<>(blogs,HttpStatus.OK);
+        try{
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            String email = authentication.getName();
+            ProfileResponseDTO user = userService.getUserDTOByEmail(email);
+            if(user == null) throw new RuntimeException("User not found");
+            List<BlogResponseDTO> blogs = user.getBlogsList();
+            if(blogs != null && !blogs.isEmpty()){
+                return new ResponseEntity<>(blogs,HttpStatus.OK);
+            }else throw new RuntimeException("No data found.");
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
         }
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @PostMapping("/new-blog")
@@ -47,6 +50,8 @@ public class BlogController {
             String email = authentication.getName();
             blogService.saveBlog(myBlog,email);
             return new ResponseEntity<>(myBlog,HttpStatus.CREATED);
+        }catch (RuntimeException e){
+            throw  new RuntimeException("Blog already exists");
         }catch (Exception e){
             return new ResponseEntity<>(myBlog,HttpStatus.BAD_REQUEST);
         }
@@ -55,18 +60,26 @@ public class BlogController {
 
     @DeleteMapping("/delete-blog/{blogId}")
     public ResponseEntity<?> deleteBlogById(@PathVariable UUID blogId){
-        Blog blog = blogService.getBlogById(blogId).orElse(null);
-        if(blog == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String email = authentication.getName();
-        blogService.deleteBlogById(blogId,email);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        try {
+            Blog blog = blogService.getBlogById(blogId).orElse(null);
+            if(blog == null) throw new RuntimeException("Blog not found");
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            String email = authentication.getName();
+            blogService.deleteBlogById(blogId,email);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
+        }
     }
 
     @PutMapping("/update-blog/{blogId}")
     public ResponseEntity<?> updateBlogById(@PathVariable UUID blogId,
                                                     @Valid @RequestBody BlogDetailsDTO newBlog){
-            blogService.updateBlogById(blogId,newBlog);
-            return new ResponseEntity<>(HttpStatus.OK);
+            try {
+                blogService.updateBlogById(blogId,newBlog);
+                return new ResponseEntity<>(HttpStatus.OK);
+            } catch (Exception e) {
+                throw new RuntimeException(e.getMessage());
+            }
     }
 }

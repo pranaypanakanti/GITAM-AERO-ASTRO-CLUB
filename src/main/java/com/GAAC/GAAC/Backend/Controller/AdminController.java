@@ -2,12 +2,16 @@ package com.GAAC.GAAC.Backend.Controller;
 
 import com.GAAC.GAAC.Backend.DTO.response.UserMiniResponseDTO;
 import com.GAAC.GAAC.Backend.ENUMS.RoleEnum;
+import com.GAAC.GAAC.Backend.ENUMS.TeamEnum;
 import com.GAAC.GAAC.Backend.Model.User;
 import com.GAAC.GAAC.Backend.Service.EmailService;
 import com.GAAC.GAAC.Backend.Service.UserService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,15 +29,43 @@ public class AdminController {
 
     @GetMapping("/get-all-users")
     public ResponseEntity<?> getAllUsers(){
-        List<UserMiniResponseDTO> users = userService.getAllUsers();
-        if(users.isEmpty()) return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
-        return new ResponseEntity<>(users, HttpStatus.OK);
+        try {
+            List<UserMiniResponseDTO> users = userService.getAllUsers();
+            if(users.isEmpty()) throw new RuntimeException("Users not found");
+            return new ResponseEntity<>(users, HttpStatus.OK);
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+
+    @GetMapping("/get-role-members/{roleName}")
+    public ResponseEntity<?> getRoleMembers(@Valid @PathVariable RoleEnum roleName){
+        try {
+            List<UserMiniResponseDTO> roleMembers = userService.getRoleMembers(roleName);
+            return new ResponseEntity<>(roleMembers,HttpStatus.OK);
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
+        }
     }
 
     @GetMapping("/change-role/{role}/{userId}")
-    public ResponseEntity<?> changeRole(@PathVariable RoleEnum role, @PathVariable UUID userId){
-        userService.changeRole(role,userId);
-        return new ResponseEntity<>(HttpStatus.OK);
+    public ResponseEntity<?> changeRole(@Valid @PathVariable RoleEnum role, @PathVariable UUID userId){
+        try {
+            userService.changeRole(role,userId);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+
+    @DeleteMapping("/delete-profile-by-id/{userId}")
+    public ResponseEntity<?> deleteUser(@PathVariable UUID userId){
+        try{
+            userService.deleteUserById(userId);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
+        }
     }
 
     @GetMapping("/send-mail")

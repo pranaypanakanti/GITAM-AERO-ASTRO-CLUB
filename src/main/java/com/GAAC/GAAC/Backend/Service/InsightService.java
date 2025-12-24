@@ -9,7 +9,6 @@ import com.GAAC.GAAC.Backend.Model.User;
 import com.GAAC.GAAC.Backend.Repository.InsightRepo;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,6 +27,8 @@ public class InsightService {
     private UserService userService;
 
     public void saveInsight(InsightDetailsDTO insight, String email) {
+        Insight duplicate = insightRepo.findByTitle(insight.getTitle()).orElse(null);
+        if(duplicate != null && duplicate.getContent().equals(insight.getContent())) throw new RuntimeException("Blog already exists");
         User user = userService.getUserByEmail(email);
         Insight newInsight = new Insight();
         newInsight.setAuthor(user);
