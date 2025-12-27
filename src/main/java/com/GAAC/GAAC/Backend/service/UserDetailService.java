@@ -1,4 +1,4 @@
-package com.GAAC.GAAC.Backend.Configuration;
+package com.GAAC.GAAC.Backend.service;
 
 
 import com.GAAC.GAAC.Backend.model.User;
