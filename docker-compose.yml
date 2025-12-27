@@ -1,7 +1,9 @@
 services:
   gaac-backend:
-    image: gaac-backend:v2
+    image: gaac-backend:v3
     container_name: gaac-app
     ports:
       - "8080:8080"
+    env_file:
+      - .env
     restart: always
