@@ -10,10 +10,10 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @SpringBootApplication
 @EnableTransactionManagement
-public class GaacBackendApplication {
+public class GAACBackendApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(GaacBackendApplication.class, args);
+		SpringApplication.run(GAACBackendApplication.class, args);
 	}
 
 	@Bean
