@@ -4,6 +4,7 @@ import com.GAAC.GAAC.Backend.model.dto.response.UserMiniResponseDTO;
 import com.GAAC.GAAC.Backend.model.enums.RoleEnum;
 import com.GAAC.GAAC.Backend.service.EmailService;
 import com.GAAC.GAAC.Backend.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,6 +24,10 @@ public class AdminController {
     @Autowired
     private EmailService emailService;
 
+    @Operation(
+            summary = "Get all users",
+            description = "ADMIN only. Returns all user details"
+    )
     @GetMapping("/get-all-users")
     public ResponseEntity<?> getAllUsers(){
         try {
@@ -34,6 +39,10 @@ public class AdminController {
         }
     }
 
+    @Operation(
+            summary = "Get users by role",
+            description = "ADMIN only. Returns all users with specific role"
+    )
     @GetMapping("/get-role-members/{roleName}")
     public ResponseEntity<?> getRoleMembers(@Valid @PathVariable RoleEnum roleName){
         try {
@@ -44,6 +53,10 @@ public class AdminController {
         }
     }
 
+    @Operation(
+            summary = "Change users role",
+            description = "ADMIN only. Updates user role by user id"
+    )
     @GetMapping("/change-role/{role}/{userId}")
     public ResponseEntity<?> changeRole(@Valid @PathVariable RoleEnum role, @PathVariable UUID userId){
         try {
@@ -54,6 +67,10 @@ public class AdminController {
         }
     }
 
+    @Operation(
+            summary = "Delete user",
+            description = "ADMIN only. Deletes user by user id"
+    )
     @DeleteMapping("/delete-profile-by-id/{userId}")
     public ResponseEntity<?> deleteUser(@PathVariable UUID userId){
         try{

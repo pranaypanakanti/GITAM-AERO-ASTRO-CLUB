@@ -6,6 +6,7 @@ import com.GAAC.GAAC.Backend.model.dto.response.ProfileResponseDTO;
 import com.GAAC.GAAC.Backend.model.Insight;
 import com.GAAC.GAAC.Backend.service.InsightService;
 import com.GAAC.GAAC.Backend.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,6 +28,10 @@ public class InsightController {
     private UserService userService;
 
 
+    @Operation(
+            summary = "Get user insights",
+            description = "Returns the insights written by the user"
+    )
     @GetMapping("/get-by-user")
     public ResponseEntity<?> getAllInsightsOfUser(){
         try{
@@ -43,6 +48,10 @@ public class InsightController {
         }
     }
 
+    @Operation(
+            summary = "Post insight",
+            description = "Create a new insight"
+    )
     @PostMapping("/new-insight")
     public ResponseEntity<InsightDetailsDTO> createInsight(@Valid @RequestBody InsightDetailsDTO myInsight){
         try{
@@ -56,6 +65,10 @@ public class InsightController {
     }
 
 
+    @Operation(
+            summary = "Delete insight",
+            description = "Deletes insight by id"
+    )
     @DeleteMapping("/delete-insight/{insightId}")
     public ResponseEntity<?> deleteInsightById(@PathVariable UUID insightId){
         try{
@@ -70,6 +83,10 @@ public class InsightController {
         }
     }
 
+    @Operation(
+            summary = "Update insight",
+            description = "Update insight by id"
+    )
     @PutMapping("/update-insight/{insightId}")
     public ResponseEntity<?> updateInsightById(@PathVariable UUID insightId,
                                                     @Valid @RequestBody InsightDetailsDTO newInsight){

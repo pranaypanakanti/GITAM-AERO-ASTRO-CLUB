@@ -4,6 +4,7 @@ import com.GAAC.GAAC.Backend.model.dto.request.UserDetailsDTO;
 import com.GAAC.GAAC.Backend.model.dto.request.UserSighInDTO;
 import com.GAAC.GAAC.Backend.model.dto.response.ProfileResponseDTO;
 import com.GAAC.GAAC.Backend.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,6 +20,10 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    @Operation(
+            summary = "Change password",
+            description = "Updates existing password to a new password"
+    )
     @PostMapping("/change-password")
     public ResponseEntity<?> changePassword(@Valid @RequestBody UserSighInDTO user){
         try{
@@ -29,6 +34,10 @@ public class UserController {
         }
     }
 
+    @Operation(
+            summary = "Create profile",
+            description = "Creates new profile with all mandatary fields"
+    )
     @PostMapping("/new-profile")
     public ResponseEntity<UserDetailsDTO> createNewUser(@Valid @RequestBody UserDetailsDTO user){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -41,6 +50,10 @@ public class UserController {
         }
     }
 
+    @Operation(
+            summary = "Get user profile",
+            description = "Returns the logged-in user's profile details"
+    )
     @GetMapping("/profile")
     public ResponseEntity<?> getUserByMail(){
         try {
@@ -53,6 +66,10 @@ public class UserController {
         }
     }
 
+    @Operation(
+            summary = "Update user profile",
+            description = "Update existing fields of user profile"
+    )
     @PutMapping("/update-profile")
     public ResponseEntity<?> updateUser(@Valid @RequestBody UserDetailsDTO newUser){
         try{
@@ -65,6 +82,10 @@ public class UserController {
         }
     }
 
+    @Operation(
+            summary = "Delete user",
+            description = "Deletes user profile"
+    )
     @DeleteMapping("/delete-profile")
     public ResponseEntity<?> deleteUser(){
         try{

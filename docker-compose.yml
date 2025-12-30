@@ -1,9 +1,33 @@
 services:
-  gaac-backend:
-    image: gaac-backend:v3
-    container_name: gaac-app
+  postgres:
+    image: postgres:16
+    container_name: gaac-postgres
+    environment:
+      POSTGRES_DB: gaac_db
+      POSTGRES_USER: gaac_user
+      POSTGRES_PASSWORD: gaac_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - gaac_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL","pg_isready -U gaac_user -d gaac_db" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    image: gaac-backend:latest
+    container_name: gaac-backend
     ports:
       - "8080:8080"
-    env_file:
-      - .env
-    restart: always
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/gaac_db
+      SPRING_DATASOURCE_USERNAME: gaac_user
+      SPRING_DATASOURCE_PASSWORD: gaac_password
+
+volumes:
+  gaac_pgdata:
