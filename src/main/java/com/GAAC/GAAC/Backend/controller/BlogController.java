@@ -6,6 +6,7 @@ import com.GAAC.GAAC.Backend.model.dto.response.ProfileResponseDTO;
 import com.GAAC.GAAC.Backend.model.Blog;
 import com.GAAC.GAAC.Backend.service.BlogService;
 import com.GAAC.GAAC.Backend.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,6 +28,10 @@ public class BlogController {
     private UserService userService;
 
 
+    @Operation(
+            summary = "Get user blogs",
+            description = "Returns the blogs written by the user"
+    )
     @GetMapping("/get-by-user")
     public ResponseEntity<?> getAllBlogsOfUser(){
         try{
@@ -43,6 +48,10 @@ public class BlogController {
         }
     }
 
+    @Operation(
+            summary = "Post blog",
+            description = "Create a new blog"
+    )
     @PostMapping("/new-blog")
     public ResponseEntity<BlogDetailsDTO> createBlog(@Valid @RequestBody BlogDetailsDTO myBlog){
         try{
@@ -58,6 +67,10 @@ public class BlogController {
     }
 
 
+    @Operation(
+            summary = "Delete blog",
+            description = "Deletes blog by id"
+    )
     @DeleteMapping("/delete-blog/{blogId}")
     public ResponseEntity<?> deleteBlogById(@PathVariable UUID blogId){
         try {
@@ -72,6 +85,10 @@ public class BlogController {
         }
     }
 
+    @Operation(
+            summary = "Update blog",
+            description = "Update blog by id"
+    )
     @PutMapping("/update-blog/{blogId}")
     public ResponseEntity<?> updateBlogById(@PathVariable UUID blogId,
                                                     @Valid @RequestBody BlogDetailsDTO newBlog){

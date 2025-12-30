@@ -11,6 +11,7 @@ import com.GAAC.GAAC.Backend.service.BlogService;
 import com.GAAC.GAAC.Backend.service.EmailService;
 import com.GAAC.GAAC.Backend.service.InsightService;
 import com.GAAC.GAAC.Backend.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -38,6 +39,10 @@ public class PublicController {
     @Autowired
     private OtpEncoder optEncoder;
 
+    @Operation(
+            summary = "Login",
+            description = "Login using the mail and password"
+    )
     @GetMapping("/login")
     public ResponseEntity<?> login(@Valid @RequestBody UserSighInDTO user){
         try{
@@ -48,6 +53,10 @@ public class PublicController {
         }
     }
 
+    @Operation(
+            summary = "Send otp for signin",
+            description = "Step-1: Email is sent to user inbox"
+    )
     @GetMapping("/send-otp")
     public ResponseEntity<?> sendOtp(@Valid @RequestBody MailDTO emailDTO){
         try{
@@ -71,6 +80,10 @@ public class PublicController {
         }
     }
 
+    @Operation(
+            summary = "SighIn",
+            description = "Step-2: Login using the mail, otp and a new password"
+    )
     @PostMapping("/sign-in")
     public ResponseEntity<?> signIn(@Valid @RequestBody UserSighInDTO user){
         try{
@@ -81,6 +94,10 @@ public class PublicController {
         }
     }
 
+    @Operation(
+            summary = "Forget password",
+            description = "Reset password using otp sent to user email"
+    )
     @PostMapping("/forget-password")
     public ResponseEntity<?> forgetPassword(@Valid @RequestBody UserSighInDTO user){
         try{
@@ -91,6 +108,10 @@ public class PublicController {
         }
     }
 
+    @Operation(
+            summary = "Get all blogs",
+            description = "Returns all user blogs"
+    )
     @GetMapping("/get-all-blogs")
     public ResponseEntity<?> getAllBlogs(){
         try{
@@ -103,6 +124,10 @@ public class PublicController {
         }
     }
 
+    @Operation(
+            summary = "Get all insights",
+            description = "Returns all user insights"
+    )
     @GetMapping("/get-all-insights")
     public ResponseEntity<?> getAllInsights(){
         try{
@@ -115,6 +140,10 @@ public class PublicController {
         }
     }
 
+    @Operation(
+            summary = "Get blogs by team",
+            description = "Returns team specific blogs"
+    )
     @GetMapping("/get-team-blogs/{teamName}")
     public ResponseEntity<?> getTeamBlogs(@PathVariable TeamEnum teamName){
         try{
@@ -125,6 +154,10 @@ public class PublicController {
         }
     }
 
+    @Operation(
+            summary = "Get members by team",
+            description = "Returns members by their team"
+    )
     @GetMapping("/get-team-members/{teamName}")
     public ResponseEntity<?> getTeamMembers(@PathVariable TeamEnum teamName){
         try{
@@ -135,6 +168,10 @@ public class PublicController {
         }
     }
 
+    @Operation(
+            summary = "Testing",
+            description = "Returns positive is connection is secured"
+    )
     @GetMapping("/health-check")
     public String healthCheck(){
         return "Positive";

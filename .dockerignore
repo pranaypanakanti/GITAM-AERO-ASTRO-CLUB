@@ -1,5 +1,9 @@
-target/
+target/*
+!target/app.jar
+.env
 .git/
+.gitignore
+node_modules
 .mvn/
 mvnw
 mvnw.cmd
