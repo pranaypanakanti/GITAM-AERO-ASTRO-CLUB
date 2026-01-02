@@ -1,6 +1,7 @@
 package com.GAAC.GAAC.Backend.controller;
 
 import com.GAAC.GAAC.Backend.model.dto.response.UserMiniResponseDTO;
+import com.GAAC.GAAC.Backend.model.enums.RecruitmentStatusEnum;
 import com.GAAC.GAAC.Backend.model.enums.RoleEnum;
 import com.GAAC.GAAC.Backend.service.EmailService;
 import com.GAAC.GAAC.Backend.service.UserService;
@@ -21,8 +22,6 @@ public class AdminController {
     @Autowired
     private UserService userService;
 
-    @Autowired
-    private EmailService emailService;
 
     @Operation(
             summary = "Get all users",
@@ -67,6 +66,16 @@ public class AdminController {
         }
     }
 
+    @GetMapping("/change-recruitment-status/{status}/{userId}")
+    public ResponseEntity<?> changeRole(@Valid @PathVariable RecruitmentStatusEnum status, @PathVariable UUID userId){
+        try {
+            userService.changeRecruitmentStatus(status,userId);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+
     @Operation(
             summary = "Delete user",
             description = "ADMIN only. Deletes user by user id"
@@ -81,8 +90,31 @@ public class AdminController {
         }
     }
 
-    @GetMapping("/send-mail")
-    public void sendMail(){
-        emailService.sendEmail("garagadharma24@gmail.com","Gentle Remainder from Pranay","Late ayindhi padukora pu..");
+    @Operation(
+            summary = "Get users by recruitment status",
+            description = "ADMIN only. Returns all users with specific recruitment status"
+    )
+    @GetMapping("/get-users-by-status/{statusName}")
+    public ResponseEntity<?> getUserByRecruitmentStatus(@Valid @PathVariable RecruitmentStatusEnum statusName){
+        try {
+            List<UserMiniResponseDTO> recruitmentStatusUsers = userService.getUserByRecruitmentStatus(statusName);
+            return new ResponseEntity<>(recruitmentStatusUsers,HttpStatus.OK);
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+
+    @Operation(
+            summary = "Reset recruitment status",
+            description = "ADMIN only. Changes all users recruitment status to not applied"
+    )
+    @GetMapping("/reset-recruitment-status")
+    public ResponseEntity<?> resetRecruitmentDetails(){
+        try {
+            userService.resetRecruitmentDetails();
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
+        }
     }
 }

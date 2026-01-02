@@ -1,5 +1,6 @@
 package com.GAAC.GAAC.Backend.repository;
 
+import com.GAAC.GAAC.Backend.model.enums.RecruitmentStatusEnum;
 import com.GAAC.GAAC.Backend.model.enums.RoleEnum;
 import com.GAAC.GAAC.Backend.model.enums.TeamEnum;
 import com.GAAC.GAAC.Backend.model.User;
@@ -15,6 +16,7 @@ public interface UserRepo extends JpaRepository<User, UUID> {
     Optional<User> findByEmail(String email);
     void deleteByEmail(String email);
     List<User> findByRole(RoleEnum role);
+    List<User> findByRecruitmentStatus(RecruitmentStatusEnum statusName);
 
     @Query(value = "SELECT * FROM users u WHERE u.email ~ :regex", nativeQuery = true)
     List<User> findUsersWithValidEmail(@Param("regex") String regex);
