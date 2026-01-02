@@ -1,16 +1,19 @@
 package com.GAAC.GAAC.Backend.service;
 
 import com.GAAC.GAAC.Backend.configuration.OtpEncoder;
+import com.GAAC.GAAC.Backend.model.dto.request.RecruitmentDTO;
 import com.GAAC.GAAC.Backend.model.dto.request.UserDetailsDTO;
 import com.GAAC.GAAC.Backend.model.dto.request.UserSighInDTO;
 import com.GAAC.GAAC.Backend.model.dto.response.ProfileResponseDTO;
 import com.GAAC.GAAC.Backend.model.dto.response.UserMiniResponseDTO;
+import com.GAAC.GAAC.Backend.model.enums.RecruitmentStatusEnum;
 import com.GAAC.GAAC.Backend.model.enums.RoleEnum;
 import com.GAAC.GAAC.Backend.model.enums.TeamEnum;
 import com.GAAC.GAAC.Backend.exceptions.InvalidOtpException;
 import com.GAAC.GAAC.Backend.mapper.UserMapper;
 import com.GAAC.GAAC.Backend.model.User;
 import com.GAAC.GAAC.Backend.repository.UserRepo;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -84,6 +87,7 @@ public class UserService {
         newUser.setImageUrl(user.getImageURL());
         newUser.setTeam(user.getTeam());
         newUser.setPosition(user.getPosition());
+        newUser.setRecruitmentStatus(RecruitmentStatusEnum.NOT_APPLIED);
         userRepo.save(newUser);
     }
 
@@ -104,6 +108,18 @@ public class UserService {
         userRepo.save(oldUser);
     }
 
+    public void recruitUser(RecruitmentDTO newUser, String email){
+        User oldUser = userRepo.findByEmail(email).orElse(null);
+        if(oldUser == null) throw new RuntimeException("User not found");
+        oldUser.setName(newUser.getName());
+        oldUser.setCollegeId(newUser.getCollegeId());
+        oldUser.setBranch(newUser.getBranch());
+        oldUser.setMobileNumber(newUser.getMobileNumber());
+        oldUser.setYearOfStudy(newUser.getYearOfStudy());
+        oldUser.setRecruitmentStatus(RecruitmentStatusEnum.APPLIED);
+        userRepo.save(oldUser);
+    }
+
     public void saveUser(User user){
         userRepo.save(user);
     }
@@ -117,7 +133,21 @@ public class UserService {
             List<User> users = userRepo.findByRole(role);
             if(users.size() <= 1) throw new RuntimeException("Minimum one Admin is required.");
         }
+        if(oldUser.getRole().equals(RoleEnum.USER)){
+            oldUser.setRecruitmentStatus(null);
+        }
+        if(role.equals(RoleEnum.USER)){
+            oldUser.setRecruitmentStatus(RecruitmentStatusEnum.NOT_APPLIED);
+        }
         oldUser.setRole(role);
+        userRepo.save(oldUser);
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    public void changeRecruitmentStatus(RecruitmentStatusEnum status, UUID id) {
+        User oldUser = userRepo.findById(id).orElse(null);
+        if(oldUser == null) throw new RuntimeException("User not found");
+        oldUser.setRecruitmentStatus(status);
         userRepo.save(oldUser);
     }
 
@@ -168,5 +198,22 @@ public class UserService {
         User user = userRepo.findById(userId).orElse(null);
         if(user == null) throw new RuntimeException("User not found");
         userRepo.deleteById(userId);
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    public List<UserMiniResponseDTO> getUserByRecruitmentStatus(@Valid RecruitmentStatusEnum statusName) {
+        return userRepo.findByRecruitmentStatus(statusName)
+                .stream()
+                .map(UserMapper::toUserMiniResponse)
+                .toList();
+    }
+
+    public void resetRecruitmentDetails() {
+        List<User> list = userRepo.findByRole(RoleEnum.USER);
+        if(list != null){
+            for(User user: list){
+                user.setRecruitmentStatus(RecruitmentStatusEnum.NOT_APPLIED);
+            }
+        }
     }
 }

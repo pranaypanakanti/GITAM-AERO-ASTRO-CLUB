@@ -1,5 +1,6 @@
 package com.GAAC.GAAC.Backend.controller;
 
+import com.GAAC.GAAC.Backend.model.dto.request.RecruitmentDTO;
 import com.GAAC.GAAC.Backend.model.dto.request.UserDetailsDTO;
 import com.GAAC.GAAC.Backend.model.dto.request.UserSighInDTO;
 import com.GAAC.GAAC.Backend.model.dto.response.ProfileResponseDTO;
@@ -44,6 +45,22 @@ public class UserController {
         String email = authentication.getName();
         try{
             userService.saveNewUser(email,user);
+            return new ResponseEntity<>(user, HttpStatus.CREATED);
+        }catch (Exception e){
+            return new ResponseEntity<>(user,HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @Operation(
+            summary = "New recruitment profile",
+            description = "Creates new profile with all mandatary fields for recruitment"
+    )
+    @PostMapping("/recruitment-profile")
+    public ResponseEntity<?> recruitmentProfile(@Valid @RequestBody RecruitmentDTO user){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+        try{
+            userService.recruitUser(user,email);
             return new ResponseEntity<>(user, HttpStatus.CREATED);
         }catch (Exception e){
             return new ResponseEntity<>(user,HttpStatus.BAD_REQUEST);

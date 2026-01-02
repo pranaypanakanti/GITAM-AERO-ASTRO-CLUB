@@ -1,6 +1,6 @@
 services:
   postgres:
-    image: postgres:16
+    image: postgres:16-alpine
     container_name: gaac-postgres
     environment:
       POSTGRES_DB: gaac_db
@@ -11,7 +11,7 @@ services:
     volumes:
       - gaac_pgdata:/var/lib/postgresql/data
     healthcheck:
-      test: [ "CMD-SHELL","pg_isready -U gaac_user -d gaac_db" ]
+      test: ["CMD-SHELL", "pg_isready -U gaac_user -d gaac_db"]
       interval: 5s
       timeout: 5s
       retries: 5
@@ -19,6 +19,7 @@ services:
   backend:
     image: gaac-backend:latest
     container_name: gaac-backend
+    build: .
     ports:
       - "8080:8080"
     depends_on:
@@ -28,6 +29,18 @@ services:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/gaac_db
       SPRING_DATASOURCE_USERNAME: gaac_user
       SPRING_DATASOURCE_PASSWORD: gaac_password
+
+      MAIL_USER: projectpranay23@gmail.com
+      MAIL_PASS_KEY: REDACTED
+
+      SERVER_ADDRESS: 0.0.0.0
+
+      SPRINGDOC_API_DOCS_PATH: /v3/api-docs
+      SPRINGDOC_SWAGGER_UI_PATH: /swagger-ui.html
+      SPRINGDOC_SWAGGER_UI_ENABLED: "true"
+
+      LOGGING_LEVEL_COM_GAAC_GAAC_BACKEND: DEBUG
+      LOGGING_LEVEL_ORG_SPRINGDOC: INFO
 
 volumes:
   gaac_pgdata:
