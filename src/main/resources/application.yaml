@@ -24,6 +24,10 @@ spring:
       ddl-auto: update
     open-in-view: false
 
+  jwt:
+    secret: PaK+HaV^uvAXEFsDEfypW#7g9^k*Z8$V
+    expiration: 86400000
+
   mail:
     host: smtp.gmail.com
     port: 587

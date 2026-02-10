@@ -1,6 +1,7 @@
 package com.GAAC.GAAC.Backend.controller;
 
 import com.GAAC.GAAC.Backend.configuration.OtpEncoder;
+import com.GAAC.GAAC.Backend.model.dto.request.AuthRequestDTO;
 import com.GAAC.GAAC.Backend.model.dto.request.MailDTO;
 import com.GAAC.GAAC.Backend.model.dto.request.UserSighInDTO;
 import com.GAAC.GAAC.Backend.model.dto.response.BlogResponseDTO;
@@ -11,11 +12,17 @@ import com.GAAC.GAAC.Backend.service.BlogService;
 import com.GAAC.GAAC.Backend.service.EmailService;
 import com.GAAC.GAAC.Backend.service.InsightService;
 import com.GAAC.GAAC.Backend.service.UserService;
+import com.GAAC.GAAC.Backend.utilis.JwtUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -39,17 +46,36 @@ public class PublicController {
     @Autowired
     private OtpEncoder optEncoder;
 
+    @Autowired
+    private JwtUtil jwtUtil;
+
+    @Autowired
+    private AuthenticationManager authenticationManager;
+
+    @Autowired
+    private UserDetailsService userDetailsService;
+
     @Operation(
             summary = "Login",
             description = "Login using the mail and password"
     )
-    @GetMapping("/login")
-    public ResponseEntity<?> login(@Valid @RequestBody UserSighInDTO user){
-        try{
-            userService.login(user);
-            return new ResponseEntity<>(user, HttpStatus.OK);
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@Valid @RequestBody AuthRequestDTO authRequest){
+        try {
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            authRequest.getEmail(),
+                            authRequest.getToken()
+                    )
+            );
+
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            String token = jwtUtil.generateToken(userDetails.getUsername());
+
+            return ResponseEntity.ok(new AuthRequestDTO(userDetails.getUsername(), token));
+
         } catch (Exception e) {
-            throw new RuntimeException(e.getMessage());
+            return ResponseEntity.status(401).body("Invalid credentials");
         }
     }
 
