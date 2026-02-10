@@ -30,49 +30,6 @@ public class UserService {
     @Autowired
     private UserRepo userRepo;
 
-    @Autowired
-    private PasswordEncoder encoder;
-
-    @Autowired
-    private OtpEncoder optEncoder;
-
-    public void login(UserSighInDTO user){
-        String password = encoder.encode(user.getPassword());
-        User OldUser = userRepo.findByEmail(user.getEmail()).orElse(null);
-        if(OldUser == null) throw new RuntimeException("User not found");
-        if(!password.equals(OldUser.getPassword())) throw new RuntimeException("Incorrect password");
-    }
-
-    public void signIn(UserSighInDTO user) {
-        String givenOtp = user.getOtp();
-        String correctOtp = optEncoder.otpEncoder(user.getEmail());
-        if(!givenOtp.equals(correctOtp)) {
-            throw new InvalidOtpException("The OTP you entered is incorrect. Please try again.");
-        }
-        User newUser = new User();
-        newUser.setEmail(user.getEmail());
-        newUser.setPassword(encoder.encode(user.getPassword()));
-        newUser.setRole(RoleEnum.USER);
-        userRepo.save(newUser);
-    }
-
-    public void forgetPassword(UserSighInDTO user){
-        String givenOtp = user.getOtp();
-        String correctOtp = optEncoder.otpEncoder(user.getEmail());
-        if(!givenOtp.equals(correctOtp)) {
-            throw new InvalidOtpException("The OTP you entered is incorrect. Please try again.");
-        }
-        User oldUser = getUserByEmail(user.getEmail());
-        oldUser.setPassword(encoder.encode(user.getPassword()));
-        userRepo.save(oldUser);
-    }
-
-    public void changePassword(UserSighInDTO user){
-        User oldUser = getUserByEmail(user.getEmail());
-        oldUser.setPassword(encoder.encode(user.getPassword()));
-        userRepo.save(oldUser);
-    }
-
     public void saveNewUser(String email,UserDetailsDTO user){
         User newUser = userRepo.findByEmail(email).orElse(null);
         if(newUser == null) throw new RuntimeException("User not found");

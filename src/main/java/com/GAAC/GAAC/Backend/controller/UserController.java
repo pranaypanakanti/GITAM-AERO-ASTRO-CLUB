@@ -4,6 +4,7 @@ import com.GAAC.GAAC.Backend.model.dto.request.RecruitmentDTO;
 import com.GAAC.GAAC.Backend.model.dto.request.UserDetailsDTO;
 import com.GAAC.GAAC.Backend.model.dto.request.UserSighInDTO;
 import com.GAAC.GAAC.Backend.model.dto.response.ProfileResponseDTO;
+import com.GAAC.GAAC.Backend.service.AuthService;
 import com.GAAC.GAAC.Backend.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
@@ -21,6 +22,9 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private AuthService authService;
+
     @Operation(
             summary = "Change password",
             description = "Updates existing password to a new password"
@@ -28,7 +32,7 @@ public class UserController {
     @PostMapping("/change-password")
     public ResponseEntity<?> changePassword(@Valid @RequestBody UserSighInDTO user){
         try{
-            userService.changePassword(user);
+            authService.changePassword(user);
             return new ResponseEntity<>(user, HttpStatus.OK);
         }catch (Exception e) {
             throw new RuntimeException(e.getMessage());
