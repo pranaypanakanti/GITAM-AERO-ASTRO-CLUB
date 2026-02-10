@@ -26,7 +26,10 @@ spring:
 
   jwt:
     secret: PaK+HaV^uvAXEFsDEfypW#7g9^k*Z8$V
-    expiration: 86400000
+    access:
+      expiration: 1800000
+    refresh:
+      expiration: 2592000000
 
   mail:
     host: smtp.gmail.com
