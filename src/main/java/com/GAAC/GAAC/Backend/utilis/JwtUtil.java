@@ -3,6 +3,7 @@ package com.GAAC.GAAC.Backend.utilis;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
@@ -29,7 +30,6 @@ public class JwtUtil {
         return Keys.hmacShaKeyFor(SECRET_KEY.getBytes());
     }
 
-    // === ACCESS TOKEN (30 min) ===
     public String generateAccessToken(String username) {
         return Jwts.builder()
                 .subject(username)
@@ -39,10 +39,9 @@ public class JwtUtil {
                 .compact();
     }
 
-    // === REFRESH TOKEN (30 days) ===
     public String generateRefreshToken(String username) {
         Map<String, Object> claims = new HashMap<>();
-        claims.put("type", "refresh"); // Mark as refresh token
+        claims.put("type", "refresh");
 
         return Jwts.builder()
                 .claims(claims)
@@ -53,7 +52,6 @@ public class JwtUtil {
                 .compact();
     }
 
-    // === VALIDATION ===
     public Boolean validateToken(String token, UserDetails userDetails) {
         final String username = extractUsername(token);
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
@@ -63,7 +61,6 @@ public class JwtUtil {
         return extractExpiration(token).before(new Date());
     }
 
-    // === EXTRACTION ===
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
     }
@@ -85,7 +82,6 @@ public class JwtUtil {
                 .getPayload();
     }
 
-    // === TOKEN TYPE CHECK ===
     public Boolean isRefreshToken(String token) {
         try {
             String type = extractClaim(token, claims -> claims.get("type", String.class));

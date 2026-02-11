@@ -39,9 +39,7 @@ public class SecurityConfiguration {
             "/webjars/**",
             "/configuration/ui",
             "/configuration/security",
-            "/api/auth/login",
-            "/api/auth/refresh",
-            "/api/auth/logout",
+            "/api/auth/**",
             "/api/public/**",
             "/error"
     };

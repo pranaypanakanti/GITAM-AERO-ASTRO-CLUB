@@ -23,13 +23,7 @@ spring:
     hibernate:
       ddl-auto: update
     open-in-view: false
-
-  jwt:
-    secret: PaK+HaV^uvAXEFsDEfypW#7g9^k*Z8$V
-    access:
-      expiration: 1800000
-    refresh:
-      expiration: 2592000000
+    show-sql: false
 
   mail:
     host: smtp.gmail.com
@@ -42,6 +36,20 @@ spring:
           auth: true
           starttls:
             enable: true
+
+jwt:
+  secret: ${JWT_SECRET}
+  access:
+    expiration: 1800000
+  refresh:
+    expiration: 2592000000
+
+logging:
+  level:
+    org.springframework.security: WARN
+    org.springframework.web: WARN
+    org.hibernate: WARN
+    com.GAAC.GAAC.Backend: INFO
 
 server:
   port: 8080

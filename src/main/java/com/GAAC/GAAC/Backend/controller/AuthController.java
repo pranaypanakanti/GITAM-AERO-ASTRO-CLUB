@@ -2,6 +2,8 @@ package com.GAAC.GAAC.Backend.controller;
 
 import com.GAAC.GAAC.Backend.model.User;
 import com.GAAC.GAAC.Backend.model.dto.request.LoginRequestDTO;
+import com.GAAC.GAAC.Backend.model.dto.request.MailDTO;
+import com.GAAC.GAAC.Backend.model.dto.request.UserSighInDTO;
 import com.GAAC.GAAC.Backend.model.dto.response.AuthResponseDTO;
 import com.GAAC.GAAC.Backend.service.AuthService;
 import com.GAAC.GAAC.Backend.service.UserService;
@@ -32,6 +34,47 @@ public class AuthController {
     @Autowired private JwtUtil jwtUtil;
     @Autowired private UserService userService;
     @Autowired private AuthService authService;
+
+    @Operation(
+            summary = "Send OTP for sign-in",
+            description = "Step-1: Email is sent to user inbox"
+    )
+    @PostMapping("/send-otp")
+    public ResponseEntity<?> sendOtpForSignIn(@Valid @RequestBody MailDTO emailDTO) {
+        try {
+            authService.sendOtpForSignIn(emailDTO.getEmail());
+            return ResponseEntity.ok().body("OTP sent successfully");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Failed to send OTP: " + e.getMessage());
+        }
+    }
+
+    @Operation(
+            summary = "Sign-up with OTP",
+            description = "Step-2: Creates account with OTP verification and returns JWT tokens"
+    )
+    @PostMapping("/sign-in")
+    public ResponseEntity<?> signIn(@Valid @RequestBody UserSighInDTO user) {
+        try {
+            AuthResponseDTO authResponse = authService.signUpWithOtp(user);
+
+            ResponseCookie refreshTokenCookie = authService.createRefreshTokenCookie(
+                    authResponse.getRefreshToken()
+            );
+
+            return ResponseEntity.status(HttpStatus.CREATED)
+                    .header(HttpHeaders.SET_COOKIE, refreshTokenCookie.toString())
+                    .body(authResponse);
+
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(e.getMessage());
+        }
+    }
 
     @Operation(summary = "Login with email and password")
     @PostMapping("/login")
@@ -106,6 +149,21 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                     .header(HttpHeaders.SET_COOKIE, logoutCookie.toString())
                     .body("Invalid refresh token");
+        }
+    }
+
+    @Operation(
+            summary = "Forget password",
+            description = "Reset password using OTP"
+    )
+    @PostMapping("/forget-password")
+    public ResponseEntity<?> forgetPassword(@Valid @RequestBody UserSighInDTO user) {
+        try {
+            authService.resetPasswordWithOtp(user);
+            return ResponseEntity.ok("Password reset successfully");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(e.getMessage());
         }
     }
 
