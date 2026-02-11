@@ -37,78 +37,7 @@ public class PublicController {
     private InsightService insightService;
 
     @Autowired
-    private EmailService emailService;
-
-    @Autowired
-    private OtpEncoder optEncoder;
-
-    @Autowired
-    private JwtUtil jwtUtil;
-
-    @Autowired
-    private AuthenticationManager authenticationManager;
-
-    @Autowired
-    private UserDetailsService userDetailsService;
-
-    @Autowired
     private AuthService authService;
-
-    @Operation(
-            summary = "Send OTP for sign-in",
-            description = "Step-1: Email is sent to user inbox"
-    )
-    @PostMapping("/send-otp")
-    public ResponseEntity<?> sendOtp(@Valid @RequestBody MailDTO emailDTO) {
-        try {
-            authService.sendOtp(emailDTO.getEmail());
-            return ResponseEntity.ok().body("OTP sent successfully");
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Failed to send OTP: " + e.getMessage());
-        }
-    }
-
-    @Operation(
-            summary = "Sign-up with OTP",
-            description = "Step-2: Creates account with OTP verification and returns JWT tokens"
-    )
-    @PostMapping("/sign-in")
-    public ResponseEntity<?> signIn(@Valid @RequestBody UserSighInDTO user) {
-        try {
-            AuthResponseDTO authResponse = authService.signUpWithOtp(user);
-
-            ResponseCookie refreshTokenCookie = authService.createRefreshTokenCookie(
-                    authResponse.getRefreshToken()
-            );
-
-            return ResponseEntity.status(HttpStatus.CREATED)
-                    .header(HttpHeaders.SET_COOKIE, refreshTokenCookie.toString())
-                    .body(authResponse);
-
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.CONFLICT)
-                    .body(e.getMessage());
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(e.getMessage());
-        }
-    }
-
-    @Operation(
-            summary = "Forget password",
-            description = "Reset password using OTP"
-    )
-    @PostMapping("/forget-password")
-    public ResponseEntity<?> forgetPassword(@Valid @RequestBody UserSighInDTO user) {
-        try {
-            authService.resetPasswordWithOtp(user);
-            return ResponseEntity.ok("Password reset successfully");
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(e.getMessage());
-        }
-    }
 
     @Operation(
             summary = "Get all blogs",

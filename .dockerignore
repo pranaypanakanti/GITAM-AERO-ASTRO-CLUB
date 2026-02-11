@@ -1,9 +1,36 @@
-target/*
-!target/app.jar
-.env
+# Build
+target/
+*.jar
+*.war
+
+# Git
 .git/
 .gitignore
-node_modules
-.mvn/
-mvnw
-mvnw.cmd
+.github/
+
+# IDE
+.idea/
+.vscode/
+*.iml
+*.iws
+*.ipr
+.classpath
+.project
+.settings/
+
+# Logs
+*.log
+logs/
+
+# Docker
+Dockerfile
+docker-compose.yml
+.dockerignore
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Others
+node_modules/
+README.md

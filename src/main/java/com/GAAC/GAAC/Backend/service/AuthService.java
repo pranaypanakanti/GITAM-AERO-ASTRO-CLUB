@@ -39,7 +39,7 @@ public class AuthService {
     @Autowired
     private OtpEncoder optEncoder;
 
-    public void sendOtp(String email) {
+    public void sendOtpForSignIn(String email) {
         String otp = otpEncoder.otpEncoder(email);
 
         String subject = "Verify Your Account - GITAM Aero Astro Club \uD83D\uDE80";
@@ -54,13 +54,6 @@ public class AuthService {
         emailService.sendEmail(email, subject, body);
     }
 
-    public void login(UserSighInDTO user){
-        String password = encoder.encode(user.getPassword());
-        User OldUser = userRepo.findByEmail(user.getEmail()).orElse(null);
-        if(OldUser == null) throw new RuntimeException("User not found");
-        if(!password.equals(OldUser.getPassword())) throw new RuntimeException("Incorrect password");
-    }
-
     public void changePassword(UserSighInDTO user){
         User oldUser = userService.getUserByEmail(user.getEmail());
         oldUser.setPassword(encoder.encode(user.getPassword()));
@@ -70,7 +63,7 @@ public class AuthService {
     public AuthResponseDTO signUpWithOtp(UserSighInDTO signUpRequest) {
         validateOtp(signUpRequest.getEmail(), signUpRequest.getOtp());
 
-        if (userService.getUserByEmail(signUpRequest.getEmail()) != null) {
+        if (userRepo.findByEmail(signUpRequest.getEmail()).orElse(null) != null) {
             throw new IllegalArgumentException("User with this email already exists");
         }
 
