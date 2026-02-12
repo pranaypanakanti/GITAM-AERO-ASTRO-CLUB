@@ -37,16 +37,19 @@ spring:
     show-sql: false
 
   mail:
-    host: smtp.gmail.com
+    host: smtp.sendgrid.net
     port: 587
-    username: ${MAIL_USER}
-    password: ${MAIL_PASS_KEY}
+    username: apikey
+    password: ${SENDGRID_API_KEY}
     properties:
       mail:
         smtp:
           auth: true
           starttls:
             enable: true
+          connectiontimeout: 30000
+          timeout: 30000
+          writetimeout: 30000
 
 jwt:
   secret: ${JWT_SECRET}

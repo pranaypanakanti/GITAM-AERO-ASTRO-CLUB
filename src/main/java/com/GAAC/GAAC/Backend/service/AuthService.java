@@ -14,12 +14,14 @@ import org.springframework.http.ResponseCookie;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
+import lombok.extern.slf4j.Slf4j;
 import java.time.Duration;
+import java.util.logging.ErrorManager;
 
 @Service
 @RequiredArgsConstructor
 @Transactional
+@Slf4j
 public class AuthService {
 
     @Autowired
@@ -31,7 +33,7 @@ public class AuthService {
     @Autowired
     private JwtUtil jwtUtil;
     @Autowired
-    private EmailService emailService;
+    private SendGridEmailService emailService;
     @Autowired
     private PasswordEncoder passwordEncoder;
     @Autowired
@@ -39,19 +41,25 @@ public class AuthService {
     @Autowired
     private OtpEncoder optEncoder;
 
+    @Transactional
     public void sendOtpForSignIn(String email) {
-        String otp = otpEncoder.otpEncoder(email);
+        try{
+            String otp = otpEncoder.otpEncoder(email);
 
-        String subject = "Verify Your Account - GITAM Aero Astro Club \uD83D\uDE80";
-        String body = "Welcome to the Skies!\n" +
-                "Hello,\n\n" +
-                "Thank you for joining the GITAM Aero Astro Club! We are excited to have you on board.\n\n" +
-                "To complete your registration, please use the following One-Time Password (OTP):\n\n" +
-                "OTP: " + otp + "\n\n" +
-                "This code is valid for the next 10 minutes. Please do not share this code with anyone.\n\n" +
-                "Team GAAC\n";
+            String subject = "Verify Your Account - GITAM Aero Astro Club \uD83D\uDE80";
+            String body = "Welcome to the Skies!\n" +
+                    "Hello,\n\n" +
+                    "Thank you for joining the GITAM Aero Astro Club! We are excited to have you on board.\n\n" +
+                    "To complete your registration, please use the following One-Time Password (OTP):\n\n" +
+                    "OTP: " + otp + "\n\n" +
+                    "This code is valid for the next 10 minutes. Please do not share this code with anyone.\n\n" +
+                    "Team GAAC\n";
 
-        emailService.sendEmail(email, subject, body);
+            emailService.sendEmail(email, subject, body);
+        }catch (Exception e) {
+            log.error("❌ OTP sending failed for {}: {}", email, e.getMessage(), e);
+            throw new RuntimeException("Failed to send OTP", e);
+        }
     }
 
     public void changePassword(UserSighInDTO user){
