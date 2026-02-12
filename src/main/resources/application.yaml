@@ -18,6 +18,17 @@ spring:
       idle-timeout: 600000
       max-lifetime: 1800000
 
+      data-source-properties:
+        cachePrepStmts: false
+        useServerPrepStmts: false
+        prepareThreshold: 0
+
+        pgbouncer: true
+
+      connection-test-query: SELECT 1
+      validation-timeout: 5000
+      leak-detection-threshold: 60000
+
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:

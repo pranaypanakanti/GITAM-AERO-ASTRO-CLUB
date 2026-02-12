@@ -69,13 +69,18 @@ public class BlogService {
         blogRepo.deleteById(id);
     }
 
+    @Transactional
     @PreAuthorize("hasAnyRole('ADMIN','MEMBER')")
     public void updateBlogById(UUID blogId, @Valid BlogDetailsDTO newBlog) {
-        Blog old = blogRepo.findById(blogId).orElse(null);
-        if(old == null) throw new RuntimeException("User not found");
-        old.setTitle(newBlog.getTitle() != null && !newBlog.getTitle().isEmpty() ? newBlog.getTitle() : old.getTitle());
-        old.setContent(newBlog.getContent() != null && !newBlog.getContent().isEmpty() ? newBlog.getContent() : old.getContent());
-        old.setTeam(newBlog.getTeam() != null ? newBlog.getTeam() : old.getTeam());
-        blogRepo.save(old);
+        try{
+            Blog old = blogRepo.findById(blogId).orElse(null);
+            if(old == null) throw new RuntimeException("User not found");
+            old.setTitle(newBlog.getTitle() != null && !newBlog.getTitle().isEmpty() ? newBlog.getTitle() : old.getTitle());
+            old.setContent(newBlog.getContent() != null && !newBlog.getContent().isEmpty() ? newBlog.getContent() : old.getContent());
+            old.setTeam(newBlog.getTeam() != null ? newBlog.getTeam() : old.getTeam());
+            blogRepo.save(old);
+        }catch (Exception e) {
+            throw new RuntimeException("Failed to update blog", e);
+        }
     }
 }
