@@ -27,5 +27,4 @@ public class ProfileResponseDTO {
     private String imageUrl;
     private String linkedinUrl;
     private List<BlogResponseDTO> blogsList;
-    private List<InsightResponseDTO> insightList;
 }

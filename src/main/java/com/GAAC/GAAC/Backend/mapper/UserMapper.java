@@ -1,7 +1,6 @@
 package com.GAAC.GAAC.Backend.mapper;
 
 import com.GAAC.GAAC.Backend.model.dto.response.BlogResponseDTO;
-import com.GAAC.GAAC.Backend.model.dto.response.InsightResponseDTO;
 import com.GAAC.GAAC.Backend.model.dto.response.ProfileResponseDTO;
 import com.GAAC.GAAC.Backend.model.dto.response.UserMiniResponseDTO;
 import com.GAAC.GAAC.Backend.model.User;
@@ -33,16 +32,6 @@ public class UserMapper {
             b.setCreatedAt(blog.getCreatedAt());
             return b;
         }).toList();
-        dto.setBlogsList(blogs);
-        List<InsightResponseDTO> insight = user.getInsightList().stream().map(insights -> {
-            InsightResponseDTO b = new InsightResponseDTO();
-            b.setId(insights.getId());
-            b.setTitle(insights.getTitle());
-            b.setContent(insights.getContent());
-            b.setCreatedAt(insights.getCreatedAt());
-            return b;
-        }).toList();
-        dto.setInsightList(insight);
         return dto;
     }
 
