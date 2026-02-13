@@ -37,8 +37,8 @@ This backend is actively used and built with **production readiness, scalability
 
 ---
 
-### 📝 Blogs & Insights
-- Create, update, and delete blogs and insights
+### 📝 Blogs
+- Create, update, and delete blogs
 - Admin-controlled publishing workflow
 - CMS-like backend support
 

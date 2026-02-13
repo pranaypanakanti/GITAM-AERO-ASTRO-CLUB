@@ -46,7 +46,7 @@ public class SwaggerConfig {
     public GroupedOpenApi contentApis() {
         return GroupedOpenApi.builder()
                 .group("content")
-                .pathsToMatch("/api/blog/**", "/api/insight/**")
+                .pathsToMatch("/api/blog/**")
                 .build();
     }
 }
