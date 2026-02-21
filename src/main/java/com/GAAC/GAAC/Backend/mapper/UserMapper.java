@@ -2,6 +2,7 @@ package com.GAAC.GAAC.Backend.mapper;
 
 import com.GAAC.GAAC.Backend.model.dto.response.BlogResponseDTO;
 import com.GAAC.GAAC.Backend.model.dto.response.ProfileResponseDTO;
+import com.GAAC.GAAC.Backend.model.dto.response.UserFilterResponseDTO;
 import com.GAAC.GAAC.Backend.model.dto.response.UserMiniResponseDTO;
 import com.GAAC.GAAC.Backend.model.User;
 
@@ -53,4 +54,23 @@ public class UserMapper {
         dto.setImageUrl(user.getImageUrl());
         return dto;
     }
+
+    public static UserFilterResponseDTO toUserFilterResponse(User user) {
+        if (user == null) return null;
+
+        return UserFilterResponseDTO.builder()
+                .id(user.getId())
+                .name(user.getName())
+                .email(user.getEmail())
+                .collegeId(user.getCollegeId())
+                .yearOfStudy(user.getYearOfStudy())
+                .recruitmentStatus(user.getRecruitmentStatus())
+                .branch(user.getBranch() != null ? user.getBranch(): null)
+                .mobileNumber(user.getMobileNumber() != null ? user.getMobileNumber() : null)
+                .team(user.getTeam() != null ? user.getTeam().name() : null)
+                .linkedinUrl(user.getLinkedinUrl() != null ? user.getLinkedinUrl() : null)
+                .description(user.getDescription() != null ? user.getDescription() : null)
+                .build();
+    }
+
 }

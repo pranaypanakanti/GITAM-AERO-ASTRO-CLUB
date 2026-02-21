@@ -12,6 +12,7 @@ public class AchievementMapper {
         dto.setTeam(achievement.getTeam());
         dto.setImageUrl(achievement.getImageUrl());
         dto.setCreatedAt(achievement.getCreatedAt());
+        dto.setPriority(achievement.getPriority());
         return dto;
     }
 }

@@ -1,5 +1,6 @@
 package com.GAAC.GAAC.Backend.model;
 
+import com.GAAC.GAAC.Backend.model.enums.PriorityEnum;
 import com.GAAC.GAAC.Backend.model.enums.TeamEnum;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
@@ -28,7 +29,7 @@ public class Project {
     private String content;
     @Enumerated(EnumType.STRING)
     private TeamEnum team;
-    private String imageUrl;
     @Column(nullable=false)
     private Instant createdAt = Instant.now();
+    private PriorityEnum priority;
 }

@@ -10,8 +10,8 @@ public class ProjectMapper {
         dto.setTitle(project.getTitle());
         dto.setContent(project.getContent());
         dto.setTeam(project.getTeam());
-        dto.setImageUrl(project.getImageUrl());
         dto.setCreatedAt(project.getCreatedAt());
+        dto.setPriority(project.getPriority());
         return dto;
     }
 }

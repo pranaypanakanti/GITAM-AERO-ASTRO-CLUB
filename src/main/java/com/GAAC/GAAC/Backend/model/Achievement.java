@@ -1,5 +1,6 @@
 package com.GAAC.GAAC.Backend.model;
 
+import com.GAAC.GAAC.Backend.model.enums.PriorityEnum;
 import com.GAAC.GAAC.Backend.model.enums.TeamEnum;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -30,4 +31,5 @@ public class Achievement {
     private String imageUrl;
     @Column(nullable=false)
     private Instant createdAt = Instant.now();
+    private PriorityEnum priority;
 }

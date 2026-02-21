@@ -1,8 +1,10 @@
 package com.GAAC.GAAC.Backend.controller;
 
+import com.GAAC.GAAC.Backend.model.dto.request.UserSearchCriteriaDTO;
 import com.GAAC.GAAC.Backend.model.dto.response.UserMiniResponseDTO;
 import com.GAAC.GAAC.Backend.model.enums.RecruitmentStatusEnum;
 import com.GAAC.GAAC.Backend.model.enums.RoleEnum;
+import com.GAAC.GAAC.Backend.model.enums.TeamEnum;
 import com.GAAC.GAAC.Backend.service.EmailService;
 import com.GAAC.GAAC.Backend.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -117,4 +119,28 @@ public class AdminController {
             throw new RuntimeException(e.getMessage());
         }
     }
+
+    @Operation(summary = "Get all filtered users")
+    @GetMapping("/filter-users")
+    public ResponseEntity<?> filterUsers(
+            @RequestParam(required = false) RecruitmentStatusEnum recruitmentStatus,
+            @RequestParam(required = false) Integer yearOfStudy,
+            @RequestParam(required = false) TeamEnum team,
+            @RequestParam(required = false) String searchTerm) {
+
+        try {
+            UserSearchCriteriaDTO criteria = new UserSearchCriteriaDTO();
+            criteria.setRecruitmentStatus(recruitmentStatus);
+            criteria.setYearOfStudy(yearOfStudy);
+            criteria.setSearchTerm(searchTerm);
+
+            List<UserMiniResponseDTO> users = userService.searchUsers(criteria);
+
+            return ResponseEntity.ok(users);
+
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Filter failed: " + e.getMessage());
+        }
+    }
+
 }
