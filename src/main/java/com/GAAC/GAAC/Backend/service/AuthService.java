@@ -44,6 +44,9 @@ public class AuthService {
     @Transactional
     public void sendOtpForSignIn(String email) {
         try{
+            if (userRepo.findByEmail(email).orElse(null) != null) {
+                throw new IllegalArgumentException("User with this email already exists");
+            }
             String otp = otpEncoder.otpEncoder(email);
 
             String subject = "Verify Your Account - GITAM Aero Astro Club \uD83D\uDE80";
