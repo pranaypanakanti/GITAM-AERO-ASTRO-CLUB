@@ -40,15 +40,15 @@ public class AchievementService {
         achievementRepo.save(newAchievement);
     }
 
-    public List<AchievementResponseDTO> getAllAchievements() {
-        return achievementRepo.findAll()
+    public List<AchievementResponseDTO> findAllAchievementsByPriority() {
+        return achievementRepo.findAllOrderedByPriority()
                 .stream()
                 .map(AchievementMapper::toAchievementResponse)
                 .toList();
     }
 
     public List<AchievementResponseDTO> getTeamAchievements(TeamEnum teamName) {
-        return achievementRepo.findByTeam(teamName)
+        return achievementRepo.findByTeamOrderByPriority(teamName)
                 .stream()
                 .map(AchievementMapper::toAchievementResponse)
                 .toList();

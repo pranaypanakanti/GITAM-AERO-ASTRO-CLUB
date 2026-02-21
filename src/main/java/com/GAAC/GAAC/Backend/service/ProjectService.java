@@ -37,19 +37,18 @@ public class ProjectService {
         newProject.setTitle(project.getTitle());
         newProject.setContent(project.getContent());
         newProject.setTeam(project.getTeam());
-        newProject.setImageUrl(project.getImageUrl());
         projectRepo.save(newProject);
     }
 
-    public List<ProjectResponseDTO> getAllProjects() {
-        return projectRepo.findAll()
+    public List<ProjectResponseDTO> findAllProjectsByPriority() {
+        return projectRepo.findAllOrderedByPriority()
                 .stream()
                 .map(ProjectMapper::toProjectResponse)
                 .toList();
     }
 
     public List<ProjectResponseDTO> getTeamProjects(TeamEnum teamName) {
-        return projectRepo.findByTeam(teamName)
+        return projectRepo.findByTeamOrderByPriority(teamName)
                 .stream()
                 .map(ProjectMapper::toProjectResponse)
                 .toList();
@@ -73,7 +72,6 @@ public class ProjectService {
             old.setTitle(newProject.getTitle() != null && !newProject.getTitle().isEmpty() ? newProject.getTitle() : old.getTitle());
             old.setContent(newProject.getContent() != null && !newProject.getContent().isEmpty() ? newProject.getContent() : old.getContent());
             old.setTeam(newProject.getTeam() != null ? newProject.getTeam() : old.getTeam());
-            old.setImageUrl(newProject.getImageUrl() != null ? newProject.getImageUrl() : old.getImageUrl());
             projectRepo.save(old);
         }catch (Exception e) {
             throw new RuntimeException("Failed to update project", e);
