@@ -17,14 +17,11 @@ public interface UserRepo extends JpaRepository<User, UUID>, JpaSpecificationExe
     Optional<User> findByEmail(String email);
     void deleteByEmail(String email);
     List<User> findByRole(RoleEnum role);
-    List<User> findByRecruitmentStatus(RecruitmentStatusEnum statusName);
-
-    @Query(value = "SELECT * FROM users u WHERE u.email ~ :regex", nativeQuery = true)
-    List<User> findUsersWithValidEmail(@Param("regex") String regex);
 
     @Query("""
     SELECT u FROM User u
     WHERE u.team = :team
+    AND u.role = 'MEMBER'
     ORDER BY
         CASE
             WHEN u.team = 'EB' AND u.position = 'PRESIDENT' THEN 1
