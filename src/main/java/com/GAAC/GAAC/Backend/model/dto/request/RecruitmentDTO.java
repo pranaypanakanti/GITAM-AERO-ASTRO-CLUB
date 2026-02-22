@@ -1,6 +1,8 @@
 package com.GAAC.GAAC.Backend.model.dto.request;
 
+import com.GAAC.GAAC.Backend.model.enums.TeamEnum;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import lombok.Getter;
 import lombok.Setter;
@@ -26,4 +28,6 @@ public class RecruitmentDTO {
     private String mobileNumber;
     @NotBlank
     private String yearOfStudy;
+    @NotNull
+    private TeamEnum team;
 }

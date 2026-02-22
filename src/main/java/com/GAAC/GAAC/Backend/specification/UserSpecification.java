@@ -17,6 +17,14 @@ public class UserSpecification {
         return (root, query, cb) -> {
             List<Predicate> predicates = new ArrayList<>();
 
+            if (criteria.getRole() != null) {
+                predicates.add(cb.equal(root.get("role"), criteria.getRole()));
+            }
+
+            if (criteria.getPosition() != null) {
+                predicates.add(cb.equal(root.get("position"), criteria.getPosition()));
+            }
+
             if (criteria.getRecruitmentStatus() != null) {
                 predicates.add(cb.equal(root.get("recruitmentStatus"), criteria.getRecruitmentStatus()));
             }

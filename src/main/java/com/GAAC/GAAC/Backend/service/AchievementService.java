@@ -24,9 +24,6 @@ public class AchievementService {
     @Autowired
     private AchievementRepo achievementRepo;
 
-    @Autowired
-    private UserService userService;
-
 
     @PreAuthorize("hasAnyRole('ADMIN')")
     public void saveAchievement(AchievementDetailsDTO achievement) {

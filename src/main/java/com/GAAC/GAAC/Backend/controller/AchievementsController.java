@@ -18,11 +18,10 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/achievement")
 public class AchievementsController {
+
     @Autowired
     private AchievementService achievementService;
 
-    @Autowired
-    private UserService userService;
 
     @Operation(
             summary = "Post achievement",

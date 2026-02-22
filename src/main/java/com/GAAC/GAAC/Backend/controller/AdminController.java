@@ -2,6 +2,7 @@ package com.GAAC.GAAC.Backend.controller;
 
 import com.GAAC.GAAC.Backend.model.dto.request.UserSearchCriteriaDTO;
 import com.GAAC.GAAC.Backend.model.dto.response.UserMiniResponseDTO;
+import com.GAAC.GAAC.Backend.model.enums.PositionEnum;
 import com.GAAC.GAAC.Backend.model.enums.RecruitmentStatusEnum;
 import com.GAAC.GAAC.Backend.model.enums.RoleEnum;
 import com.GAAC.GAAC.Backend.model.enums.TeamEnum;
@@ -35,20 +36,6 @@ public class AdminController {
             List<UserMiniResponseDTO> users = userService.getAllUsers();
             if(users.isEmpty()) throw new RuntimeException("Users not found");
             return new ResponseEntity<>(users, HttpStatus.OK);
-        } catch (Exception e) {
-            throw new RuntimeException(e.getMessage());
-        }
-    }
-
-    @Operation(
-            summary = "Get users by role",
-            description = "ADMIN only. Returns all users with specific role"
-    )
-    @GetMapping("/get-role-members/{roleName}")
-    public ResponseEntity<?> getRoleMembers(@Valid @PathVariable RoleEnum roleName){
-        try {
-            List<UserMiniResponseDTO> roleMembers = userService.getRoleMembers(roleName);
-            return new ResponseEntity<>(roleMembers,HttpStatus.OK);
         } catch (Exception e) {
             throw new RuntimeException(e.getMessage());
         }
@@ -93,20 +80,6 @@ public class AdminController {
     }
 
     @Operation(
-            summary = "Get users by recruitment status",
-            description = "ADMIN only. Returns all users with specific recruitment status"
-    )
-    @GetMapping("/get-users-by-status/{statusName}")
-    public ResponseEntity<?> getUserByRecruitmentStatus(@Valid @PathVariable RecruitmentStatusEnum statusName){
-        try {
-            List<UserMiniResponseDTO> recruitmentStatusUsers = userService.getUserByRecruitmentStatus(statusName);
-            return new ResponseEntity<>(recruitmentStatusUsers,HttpStatus.OK);
-        } catch (Exception e) {
-            throw new RuntimeException(e.getMessage());
-        }
-    }
-
-    @Operation(
             summary = "Reset recruitment status",
             description = "ADMIN only. Changes all users recruitment status to not applied"
     )
@@ -126,12 +99,17 @@ public class AdminController {
             @RequestParam(required = false) RecruitmentStatusEnum recruitmentStatus,
             @RequestParam(required = false) Integer yearOfStudy,
             @RequestParam(required = false) TeamEnum team,
+            @RequestParam(required = false) RoleEnum role,
+            @RequestParam(required = false) PositionEnum position,
             @RequestParam(required = false) String searchTerm) {
 
         try {
             UserSearchCriteriaDTO criteria = new UserSearchCriteriaDTO();
             criteria.setRecruitmentStatus(recruitmentStatus);
             criteria.setYearOfStudy(yearOfStudy);
+            criteria.setTeam(team);
+            criteria.setRole(role);
+            criteria.setPosition(position);
             criteria.setSearchTerm(searchTerm);
 
             List<UserMiniResponseDTO> users = userService.searchUsers(criteria);

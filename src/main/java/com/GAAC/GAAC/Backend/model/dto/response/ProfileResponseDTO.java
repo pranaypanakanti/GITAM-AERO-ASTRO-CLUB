@@ -1,6 +1,7 @@
 package com.GAAC.GAAC.Backend.model.dto.response;
 
 import com.GAAC.GAAC.Backend.model.enums.PositionEnum;
+import com.GAAC.GAAC.Backend.model.enums.RecruitmentStatusEnum;
 import com.GAAC.GAAC.Backend.model.enums.RoleEnum;
 import com.GAAC.GAAC.Backend.model.enums.TeamEnum;
 import lombok.Getter;
@@ -24,6 +25,7 @@ public class ProfileResponseDTO {
     private TeamEnum team;
     private PositionEnum position;
     private String description;
+    private RecruitmentStatusEnum recruitmentStatus;
     private String imageUrl;
     private String linkedinUrl;
     private List<BlogResponseDTO> blogsList;
