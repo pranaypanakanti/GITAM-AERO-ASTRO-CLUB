@@ -12,7 +12,6 @@ import java.util.UUID;
 
 public interface AchievementRepo extends JpaRepository<Achievement, UUID> {
     Optional<Achievement> findByTitle(String title);
-    List<Achievement> findByTeam(TeamEnum team);
 
     @Query("SELECT a FROM Achievement a ORDER BY " +
             "CASE a.priority " +
@@ -32,7 +31,6 @@ public interface AchievementRepo extends JpaRepository<Achievement, UUID> {
                 WHEN 'LOW' THEN 3
                 ELSE 4
             END,
-            a.achievedDate DESC,
             a.id ASC
         """)
     List<Achievement> findByTeamOrderByPriority(@Param("team") TeamEnum team);

@@ -22,6 +22,7 @@ public class UserMapper {
         dto.setAASID(user.getAASID());
         dto.setLinkedinUrl(user.getLinkedinUrl());
         dto.setRole(user.getRole());
+        dto.setRecruitmentStatus(user.getRecruitmentStatus());
         dto.setTeam(user.getTeam());
         dto.setPosition(user.getPosition());
         dto.setImageUrl(user.getImageUrl());
@@ -60,16 +61,18 @@ public class UserMapper {
 
         return UserFilterResponseDTO.builder()
                 .id(user.getId())
+                .role(user.getRole())
                 .name(user.getName())
                 .email(user.getEmail())
                 .collegeId(user.getCollegeId())
-                .yearOfStudy(user.getYearOfStudy())
-                .recruitmentStatus(user.getRecruitmentStatus())
+                .team(user.getTeam() != null ? user.getTeam() : null)
                 .branch(user.getBranch() != null ? user.getBranch(): null)
-                .mobileNumber(user.getMobileNumber() != null ? user.getMobileNumber() : null)
-                .team(user.getTeam() != null ? user.getTeam().name() : null)
+                .position(user.getPosition() != null ? user.getPosition() : null)
+                .yearOfStudy(user.getYearOfStudy() != null ? user.getYearOfStudy() : null)
                 .linkedinUrl(user.getLinkedinUrl() != null ? user.getLinkedinUrl() : null)
                 .description(user.getDescription() != null ? user.getDescription() : null)
+                .mobileNumber(user.getMobileNumber() != null ? user.getMobileNumber() : null)
+                .recruitmentStatus(user.getRecruitmentStatus() != null ? user.getRecruitmentStatus() : null)
                 .build();
     }
 

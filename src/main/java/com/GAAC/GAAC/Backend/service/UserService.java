@@ -76,6 +76,7 @@ public class UserService {
         oldUser.setBranch(newUser.getBranch());
         oldUser.setMobileNumber(newUser.getMobileNumber());
         oldUser.setYearOfStudy(newUser.getYearOfStudy());
+        oldUser.setTeam(newUser.getTeam());
         oldUser.setRecruitmentStatus(RecruitmentStatusEnum.APPLIED);
         userRepo.save(oldUser);
     }
@@ -139,14 +140,6 @@ public class UserService {
                 .toList();
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
-    public List<UserMiniResponseDTO> getRoleMembers(RoleEnum roleName) {
-        return userRepo.findByRole(roleName)
-                .stream()
-                .map(UserMapper::toUserMiniResponse)
-                .toList();
-    }
-
     public void deleteUserByEmail(String email){
         User user = userRepo.findByEmail(email).orElse(null);
         if(user == null) throw new RuntimeException("User not found");
@@ -158,14 +151,6 @@ public class UserService {
         User user = userRepo.findById(userId).orElse(null);
         if(user == null) throw new RuntimeException("User not found");
         userRepo.deleteById(userId);
-    }
-
-    @PreAuthorize("hasRole('ADMIN')")
-    public List<UserMiniResponseDTO> getUserByRecruitmentStatus(@Valid RecruitmentStatusEnum statusName) {
-        return userRepo.findByRecruitmentStatus(statusName)
-                .stream()
-                .map(UserMapper::toUserMiniResponse)
-                .toList();
     }
 
     public void resetRecruitmentDetails() {

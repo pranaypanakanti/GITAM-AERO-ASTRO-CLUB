@@ -1,6 +1,8 @@
 package com.GAAC.GAAC.Backend.model.dto.response;
 
+import com.GAAC.GAAC.Backend.model.enums.PositionEnum;
 import com.GAAC.GAAC.Backend.model.enums.RecruitmentStatusEnum;
+import com.GAAC.GAAC.Backend.model.enums.RoleEnum;
 import com.GAAC.GAAC.Backend.model.enums.TeamEnum;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -25,4 +27,6 @@ public class UserFilterResponseDTO {
     private TeamEnum team;
     private String linkedinUrl;
     private String description;
+    private RoleEnum role;
+    private PositionEnum position;
 }

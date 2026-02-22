@@ -31,5 +31,6 @@ public class Achievement {
     private String imageUrl;
     @Column(nullable=false)
     private Instant createdAt = Instant.now();
+    @Enumerated(EnumType.STRING)
     private PriorityEnum priority;
 }

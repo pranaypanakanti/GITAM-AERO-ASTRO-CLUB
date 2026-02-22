@@ -31,5 +31,6 @@ public class Project {
     private TeamEnum team;
     @Column(nullable=false)
     private Instant createdAt = Instant.now();
+    @Enumerated(EnumType.STRING)
     private PriorityEnum priority;
 }
