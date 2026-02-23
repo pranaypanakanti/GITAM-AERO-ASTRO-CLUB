@@ -1,5 +1,8 @@
 package com.GAAC.GAAC.Backend.controller;
 
+import com.GAAC.GAAC.Backend.model.Achievement;
+import com.GAAC.GAAC.Backend.model.Blog;
+import com.GAAC.GAAC.Backend.model.Project;
 import com.GAAC.GAAC.Backend.model.dto.response.AchievementResponseDTO;
 import com.GAAC.GAAC.Backend.model.dto.response.BlogResponseDTO;
 import com.GAAC.GAAC.Backend.model.dto.response.ProjectResponseDTO;
@@ -32,54 +35,6 @@ public class PublicController {
 
     @Autowired
     private AuthService authService;
-
-    @Operation(
-            summary = "Get all blogs",
-            description = "Returns all user blogs"
-    )
-    @GetMapping("/get-all-blogs")
-    public ResponseEntity<?> getAllBlogs(){
-        try{
-            List<BlogResponseDTO> blogs = blogService.getAllBlogs();
-            if(blogs != null && !blogs.isEmpty()){
-                return new ResponseEntity<>(blogs, HttpStatus.OK);
-            }else throw new RuntimeException("No data available");
-        } catch (Exception e) {
-            throw new RuntimeException(e.getMessage());
-        }
-    }
-
-    @Operation(
-            summary = "Get all achievements",
-            description = "Returns all user achievements"
-    )
-    @GetMapping("/get-all-achievements")
-    public ResponseEntity<?> findAllAchievementsByPriority(){
-        try{
-            List<AchievementResponseDTO> achievements = achievementService.findAllAchievementsByPriority();
-            if(achievements != null && !achievements.isEmpty()){
-                return new ResponseEntity<>(achievements, HttpStatus.OK);
-            }else throw new RuntimeException("No data available");
-        } catch (Exception e) {
-            throw new RuntimeException(e.getMessage());
-        }
-    }
-
-    @Operation(
-            summary = "Get all projects",
-            description = "Returns all user projects"
-    )
-    @GetMapping("/get-all-projects")
-    public ResponseEntity<?> findAllProjectsByPriority(){
-        try{
-            List<ProjectResponseDTO> projects = projectService.findAllProjectsByPriority();
-            if(projects != null && !projects.isEmpty()){
-                return new ResponseEntity<>(projects, HttpStatus.OK);
-            }else throw new RuntimeException("No data available");
-        } catch (Exception e) {
-            throw new RuntimeException(e.getMessage());
-        }
-    }
 
 
     @Operation(
@@ -135,6 +90,69 @@ public class PublicController {
             return new ResponseEntity<>(teamMembers,HttpStatus.OK);
         } catch (Exception e) {
             throw new RuntimeException(e.getMessage());
+        }
+    }
+
+    @Operation(summary = "Get all achievements or search by title/description")
+    @GetMapping("/get-all-achievements")
+    public ResponseEntity<?> getAchievements(
+            @RequestParam(required = false) String search) {
+
+        try {
+            List<Achievement> achievements = achievementService.searchAchievements(search);
+
+            if (achievements.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NO_CONTENT)
+                        .body("No achievements found");
+            }
+
+            return ResponseEntity.ok(achievements);
+
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Failed to fetch achievements: " + e.getMessage());
+        }
+    }
+
+    @Operation(summary = "Get all projects or search by title/description")
+    @GetMapping("/get-all-projects")
+    public ResponseEntity<?> getProjects(
+            @RequestParam(required = false) String search) {
+
+        try {
+            List<Project> projects = projectService.searchProjects(search);
+
+            if (projects.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NO_CONTENT)
+                        .body("No projects found");
+            }
+
+            return ResponseEntity.ok(projects);
+
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Failed to fetch projects: " + e.getMessage());
+        }
+    }
+
+    @Operation(summary = "Get all blogs or search by title/description")
+    @GetMapping("/get-all-blogs")
+    public ResponseEntity<?> getBlogs(
+            @RequestParam(required = false) String search) {
+
+        try {
+            List<Blog> blogs = blogService.searchBlogs(search);
+
+            if (blogs.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NO_CONTENT)
+                        .body("No blogs found");
+            }
+
+            return ResponseEntity.ok(blogs);
+
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Failed to fetch blogs: " + e.getMessage());
         }
     }
 

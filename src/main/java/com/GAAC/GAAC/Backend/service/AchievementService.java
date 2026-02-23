@@ -75,4 +75,11 @@ public class AchievementService {
             throw new RuntimeException("Failed to update achievement", e);
         }
     }
+
+    public List<Achievement> searchAchievements(String query) {
+        if (query == null || query.trim().isEmpty()) {
+            return achievementRepo.findAll();
+        }
+        return achievementRepo.searchAchievements(query);
+    }
 }

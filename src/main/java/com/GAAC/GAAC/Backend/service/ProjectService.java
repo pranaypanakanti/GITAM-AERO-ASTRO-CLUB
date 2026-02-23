@@ -77,4 +77,11 @@ public class ProjectService {
             throw new RuntimeException("Failed to update project", e);
         }
     }
+
+    public List<Project> searchProjects(String query) {
+        if (query == null || query.trim().isEmpty()) {
+            return projectRepo.findAll();
+        }
+        return projectRepo.searchProjects(query);
+    }
 }

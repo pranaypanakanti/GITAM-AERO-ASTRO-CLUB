@@ -34,4 +34,18 @@ public interface AchievementRepo extends JpaRepository<Achievement, UUID> {
             a.id ASC
         """)
     List<Achievement> findByTeamOrderByPriority(@Param("team") TeamEnum team);
+
+    @Query("""
+        SELECT a FROM Achievement a
+        WHERE LOWER(a.title) LIKE LOWER(CONCAT('%', :query, '%'))
+           OR LOWER(a.content) LIKE LOWER(CONCAT('%', :query, '%'))
+        ORDER BY 
+            CASE a.priority
+                WHEN 'HIGH' THEN 1
+                WHEN 'MEDIUM' THEN 2
+                WHEN 'LOW' THEN 3
+            END,
+            a.createdAt DESC
+        """)
+    List<Achievement> searchAchievements(@Param("query") String query);
 }
