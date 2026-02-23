@@ -83,4 +83,11 @@ public class BlogService {
             throw new RuntimeException("Failed to update blog", e);
         }
     }
+
+    public List<Blog> searchBlogs(String query) {
+        if (query == null || query.trim().isEmpty()) {
+            return blogRepo.findAll();
+        }
+        return blogRepo.searchBlogs(query);
+    }
 }

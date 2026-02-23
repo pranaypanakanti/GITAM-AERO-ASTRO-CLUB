@@ -34,4 +34,12 @@ public interface ProjectRepo extends JpaRepository<Project, UUID> {
             a.id ASC
         """)
     List<Project> findByTeamOrderByPriority(@Param("team") TeamEnum team);
+
+    @Query("""
+        SELECT p FROM Project p
+        WHERE LOWER(p.title) LIKE LOWER(CONCAT('%', :query, '%'))
+           OR LOWER(p.content) LIKE LOWER(CONCAT('%', :query, '%'))
+        ORDER BY p.createdAt DESC
+        """)
+    List<Project> searchProjects(@Param("query") String query);
 }
