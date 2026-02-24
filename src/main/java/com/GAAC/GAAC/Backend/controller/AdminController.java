@@ -1,5 +1,7 @@
 package com.GAAC.GAAC.Backend.controller;
 
+import com.GAAC.GAAC.Backend.model.MailContent;
+import com.GAAC.GAAC.Backend.model.dto.request.AchievementDetailsDTO;
 import com.GAAC.GAAC.Backend.model.dto.request.UserSearchCriteriaDTO;
 import com.GAAC.GAAC.Backend.model.dto.response.UserMiniResponseDTO;
 import com.GAAC.GAAC.Backend.model.enums.PositionEnum;
@@ -24,6 +26,9 @@ public class AdminController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private EmailService emailService;
 
 
     @Operation(
@@ -118,6 +123,22 @@ public class AdminController {
 
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Filter failed: " + e.getMessage());
+        }
+    }
+
+    //update as ENUMS...
+    @Operation(
+            summary = "Update mail content",
+            description = "Update mail content by id"
+    )
+    @PutMapping("/update-mail-content/{mailContentId}")
+    public ResponseEntity<?> updateMailContentById(@PathVariable UUID mailContentId,
+                                                   @Valid @RequestBody MailContent newMailContent){
+        try {
+            emailService.updateMailContentById(mailContentId,newMailContent);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
         }
     }
 
