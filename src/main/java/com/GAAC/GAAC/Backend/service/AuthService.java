@@ -1,11 +1,14 @@
 package com.GAAC.GAAC.Backend.service;
 
 import com.GAAC.GAAC.Backend.configuration.OtpEncoder;
+import com.GAAC.GAAC.Backend.model.MailContent;
 import com.GAAC.GAAC.Backend.model.User;
 import com.GAAC.GAAC.Backend.model.dto.request.UserSighInDTO;
 import com.GAAC.GAAC.Backend.model.dto.response.AuthResponseDTO;
+import com.GAAC.GAAC.Backend.model.enums.MailContentEnum;
 import com.GAAC.GAAC.Backend.model.enums.RoleEnum;
 import com.GAAC.GAAC.Backend.exceptions.InvalidOtpException;
+import com.GAAC.GAAC.Backend.repository.MailContentRepo;
 import com.GAAC.GAAC.Backend.repository.UserRepo;
 import com.GAAC.GAAC.Backend.utilis.JwtUtil;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +19,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import java.time.Duration;
-import java.util.logging.ErrorManager;
 
 @Service
 @RequiredArgsConstructor
@@ -39,24 +41,28 @@ public class AuthService {
     @Autowired
     private PasswordEncoder encoder;
     @Autowired
-    private OtpEncoder optEncoder;
+    private MailContentRepo mailContentRepo;
 
     @Transactional
-    public void sendOtpForSignIn(String email) {
+    public void sendOtp(MailContentEnum reason, String email) {
         try{
             if (userRepo.findByEmail(email).orElse(null) != null) {
                 throw new IllegalArgumentException("User with this email already exists");
             }
             String otp = otpEncoder.otpEncoder(email);
 
-            String subject = "Verify Your Account - GITAM Aero Astro Club \uD83D\uDE80";
-            String body = "Welcome to the Skies!\n" +
-                    "Hello,\n\n" +
-                    "Thank you for joining the GITAM Aero Astro Club! We are excited to have you on board.\n\n" +
-                    "To complete your registration, please use the following One-Time Password (OTP):\n\n" +
-                    "OTP: " + otp + "\n\n" +
-                    "This code is valid for the next 10 minutes. Please do not share this code with anyone.\n\n" +
-                    "Team GAAC\n";
+            MailContent mailContent = mailContentRepo.findByTitle(reason).orElse(null);
+
+            if(mailContent == null){
+                log.error("❌ Failed to send OTP, content not found, error");
+                throw new RuntimeException("Failed to send OTP, content not found");
+            }
+
+            String subject = mailContent.getSubject();
+            String body = mailContent.getBody();
+            if(!reason.equals(MailContentEnum.RECRUITMENT)){
+                body = body.replace("{{OTP}}",otp);
+            }
 
             emailService.sendEmail(email, subject, body);
         }catch (Exception e) {

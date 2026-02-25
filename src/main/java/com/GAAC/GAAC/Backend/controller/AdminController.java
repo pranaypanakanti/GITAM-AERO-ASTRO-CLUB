@@ -4,10 +4,7 @@ import com.GAAC.GAAC.Backend.model.MailContent;
 import com.GAAC.GAAC.Backend.model.dto.request.AchievementDetailsDTO;
 import com.GAAC.GAAC.Backend.model.dto.request.UserSearchCriteriaDTO;
 import com.GAAC.GAAC.Backend.model.dto.response.UserMiniResponseDTO;
-import com.GAAC.GAAC.Backend.model.enums.PositionEnum;
-import com.GAAC.GAAC.Backend.model.enums.RecruitmentStatusEnum;
-import com.GAAC.GAAC.Backend.model.enums.RoleEnum;
-import com.GAAC.GAAC.Backend.model.enums.TeamEnum;
+import com.GAAC.GAAC.Backend.model.enums.*;
 import com.GAAC.GAAC.Backend.service.EmailService;
 import com.GAAC.GAAC.Backend.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -15,6 +12,8 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -126,19 +125,28 @@ public class AdminController {
         }
     }
 
-    //update as ENUMS...
     @Operation(
             summary = "Update mail content",
             description = "Update mail content by id"
     )
-    @PutMapping("/update-mail-content/{mailContentId}")
-    public ResponseEntity<?> updateMailContentById(@PathVariable UUID mailContentId,
+    @PutMapping("/update-mail-content/{mailContentTitle}")
+    public ResponseEntity<?> updateMailContentById(@PathVariable @Valid MailContentEnum mailContentTitle,
                                                    @Valid @RequestBody MailContent newMailContent){
         try {
-            emailService.updateMailContentById(mailContentId,newMailContent);
+            emailService.updateMailContentById(mailContentTitle,newMailContent);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e) {
             throw new RuntimeException(e.getMessage());
+        }
+    }
+
+    @PostMapping("/new-mail-content")
+    public ResponseEntity<?> createMailContent(@Valid @RequestBody MailContent newMailContent){
+        try{
+            emailService.saveMailContent(newMailContent);
+            return new ResponseEntity<>(HttpStatus.CREATED);
+        }catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 
