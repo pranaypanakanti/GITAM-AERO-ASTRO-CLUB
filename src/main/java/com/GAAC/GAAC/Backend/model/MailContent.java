@@ -1,5 +1,6 @@
 package com.GAAC.GAAC.Backend.model;
 
+import com.GAAC.GAAC.Backend.model.enums.MailContentEnum;
 import com.GAAC.GAAC.Backend.model.enums.PriorityEnum;
 import com.GAAC.GAAC.Backend.model.enums.TeamEnum;
 import jakarta.persistence.*;
@@ -23,7 +24,7 @@ public class MailContent {
     @Column(columnDefinition = "uuid")
     private UUID id;
     @Column(nullable = false)
-    private String title;
+    private MailContentEnum title;
     @Column(columnDefinition = "text", nullable = false)
     private String subject;
     @Column(columnDefinition = "text", nullable = false)

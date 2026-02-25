@@ -1,6 +1,7 @@
 package com.GAAC.GAAC.Backend.service;
 
 import com.GAAC.GAAC.Backend.model.MailContent;
+import com.GAAC.GAAC.Backend.model.enums.MailContentEnum;
 import com.GAAC.GAAC.Backend.repository.MailContentRepo;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
@@ -33,4 +34,23 @@ public class EmailService {
         }
     }
 
+    public void updateMailContentById(@Valid MailContentEnum mailContentTitle, @Valid MailContent newMailContent) {
+        try{
+            MailContent oldContent =  mailContentRepo.findByTitle(mailContentTitle).orElse(null);
+            if(oldContent == null) throw  new RuntimeException("Mail title not found");
+            oldContent.setBody(newMailContent.getBody() != null && !newMailContent.getBody().isEmpty() ? newMailContent.getBody() : oldContent.getBody());
+            oldContent.setSubject(newMailContent.getSubject() != null && !newMailContent.getSubject().isEmpty() ? newMailContent.getSubject() : oldContent.getSubject());
+            mailContentRepo.save(oldContent);
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+
+    public void saveMailContent(@Valid MailContent mailContent) {
+        MailContent newMailContent = new MailContent();
+        newMailContent.setTitle(mailContent.getTitle());
+        newMailContent.setSubject(mailContent.getSubject());
+        newMailContent.setBody(mailContent.getBody());
+        mailContentRepo.save(newMailContent);
+    }
 }

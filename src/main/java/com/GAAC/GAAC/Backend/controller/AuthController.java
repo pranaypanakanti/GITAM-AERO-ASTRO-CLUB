@@ -5,6 +5,7 @@ import com.GAAC.GAAC.Backend.model.dto.request.LoginRequestDTO;
 import com.GAAC.GAAC.Backend.model.dto.request.MailDTO;
 import com.GAAC.GAAC.Backend.model.dto.request.UserSighInDTO;
 import com.GAAC.GAAC.Backend.model.dto.response.AuthResponseDTO;
+import com.GAAC.GAAC.Backend.model.enums.MailContentEnum;
 import com.GAAC.GAAC.Backend.service.AuthService;
 import com.GAAC.GAAC.Backend.service.UserService;
 import com.GAAC.GAAC.Backend.utilis.JwtUtil;
@@ -39,10 +40,10 @@ public class AuthController {
             summary = "Send OTP for sign-in",
             description = "Step-1: Email is sent to user inbox"
     )
-    @PostMapping("/send-otp")
-    public ResponseEntity<?> sendOtpForSignIn(@Valid @RequestBody MailDTO emailDTO) {
+    @PostMapping("/send-otp/{reason}")
+    public ResponseEntity<?> sendOtp(@PathVariable MailContentEnum reason, @Valid @RequestBody MailDTO emailDTO) {
         try {
-            authService.sendOtpForSignIn(emailDTO.getEmail());
+            authService.sendOtp(reason, emailDTO.getEmail());
             return ResponseEntity.ok().body("OTP sent successfully");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
