@@ -1,25 +1,20 @@
 package com.GAAC.GAAC.Backend.service;
 
-import com.GAAC.GAAC.Backend.configuration.OtpEncoder;
 import com.GAAC.GAAC.Backend.model.dto.request.RecruitmentDTO;
 import com.GAAC.GAAC.Backend.model.dto.request.UserDetailsDTO;
 import com.GAAC.GAAC.Backend.model.dto.request.UserSearchCriteriaDTO;
-import com.GAAC.GAAC.Backend.model.dto.request.UserSighInDTO;
 import com.GAAC.GAAC.Backend.model.dto.response.ProfileResponseDTO;
 import com.GAAC.GAAC.Backend.model.dto.response.UserMiniResponseDTO;
 import com.GAAC.GAAC.Backend.model.enums.RecruitmentStatusEnum;
 import com.GAAC.GAAC.Backend.model.enums.RoleEnum;
 import com.GAAC.GAAC.Backend.model.enums.TeamEnum;
-import com.GAAC.GAAC.Backend.exceptions.InvalidOtpException;
 import com.GAAC.GAAC.Backend.mapper.UserMapper;
 import com.GAAC.GAAC.Backend.model.User;
 import com.GAAC.GAAC.Backend.repository.UserRepo;
 import com.GAAC.GAAC.Backend.specification.UserSpecification;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

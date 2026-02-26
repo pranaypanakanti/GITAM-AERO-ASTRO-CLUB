@@ -2,7 +2,6 @@ package com.GAAC.GAAC.Backend.model;
 
 import com.GAAC.GAAC.Backend.model.enums.PriorityEnum;
 import com.GAAC.GAAC.Backend.model.enums.TeamEnum;
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;

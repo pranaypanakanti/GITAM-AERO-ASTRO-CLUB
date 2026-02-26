@@ -3,7 +3,6 @@ package com.GAAC.GAAC.Backend.service;
 
 import com.GAAC.GAAC.Backend.mapper.ProjectMapper;
 import com.GAAC.GAAC.Backend.model.Project;
-import com.GAAC.GAAC.Backend.model.User;
 import com.GAAC.GAAC.Backend.model.dto.request.ProjectDetailsDTO;
 import com.GAAC.GAAC.Backend.model.dto.response.ProjectResponseDTO;
 import com.GAAC.GAAC.Backend.model.enums.TeamEnum;
