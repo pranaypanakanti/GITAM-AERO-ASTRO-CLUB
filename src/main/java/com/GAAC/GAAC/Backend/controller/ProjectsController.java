@@ -2,8 +2,6 @@ package com.GAAC.GAAC.Backend.controller;
 
 import com.GAAC.GAAC.Backend.model.Project;
 import com.GAAC.GAAC.Backend.model.dto.request.ProjectDetailsDTO;
-import com.GAAC.GAAC.Backend.model.dto.response.ProjectResponseDTO;
-import com.GAAC.GAAC.Backend.model.dto.response.ProfileResponseDTO;
 import com.GAAC.GAAC.Backend.service.ProjectService;
 import com.GAAC.GAAC.Backend.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;

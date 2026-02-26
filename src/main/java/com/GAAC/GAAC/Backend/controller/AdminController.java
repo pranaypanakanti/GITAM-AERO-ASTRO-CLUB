@@ -1,7 +1,6 @@
 package com.GAAC.GAAC.Backend.controller;
 
 import com.GAAC.GAAC.Backend.model.MailContent;
-import com.GAAC.GAAC.Backend.model.dto.request.AchievementDetailsDTO;
 import com.GAAC.GAAC.Backend.model.dto.request.UserSearchCriteriaDTO;
 import com.GAAC.GAAC.Backend.model.dto.response.UserMiniResponseDTO;
 import com.GAAC.GAAC.Backend.model.enums.*;
@@ -12,8 +11,6 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

@@ -3,7 +3,6 @@ package com.GAAC.GAAC.Backend.controller;
 import com.GAAC.GAAC.Backend.model.Achievement;
 import com.GAAC.GAAC.Backend.model.dto.request.AchievementDetailsDTO;
 import com.GAAC.GAAC.Backend.service.AchievementService;
-import com.GAAC.GAAC.Backend.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;

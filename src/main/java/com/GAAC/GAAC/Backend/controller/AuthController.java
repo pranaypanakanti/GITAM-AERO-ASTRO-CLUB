@@ -1,6 +1,5 @@
 package com.GAAC.GAAC.Backend.controller;
 
-import com.GAAC.GAAC.Backend.model.User;
 import com.GAAC.GAAC.Backend.model.dto.request.LoginRequestDTO;
 import com.GAAC.GAAC.Backend.model.dto.request.MailDTO;
 import com.GAAC.GAAC.Backend.model.dto.request.UserSighInDTO;
@@ -10,10 +9,7 @@ import com.GAAC.GAAC.Backend.service.AuthService;
 import com.GAAC.GAAC.Backend.service.UserService;
 import com.GAAC.GAAC.Backend.utilis.JwtUtil;
 import io.swagger.v3.oas.annotations.Operation;
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
-import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -24,8 +20,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
-
-import java.time.Duration;
 
 @RestController
 @RequestMapping("/api/auth")
