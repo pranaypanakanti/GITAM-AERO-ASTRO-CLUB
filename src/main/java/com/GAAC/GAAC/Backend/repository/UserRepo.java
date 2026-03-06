@@ -1,6 +1,5 @@
 package com.GAAC.GAAC.Backend.repository;
 
-import com.GAAC.GAAC.Backend.model.enums.RecruitmentStatusEnum;
 import com.GAAC.GAAC.Backend.model.enums.RoleEnum;
 import com.GAAC.GAAC.Backend.model.enums.TeamEnum;
 import com.GAAC.GAAC.Backend.model.User;

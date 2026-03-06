@@ -137,14 +137,9 @@ public class AdminController {
         }
     }
 
-    @PostMapping("/new-mail-content")
-    public ResponseEntity<?> createMailContent(@Valid @RequestBody MailContent newMailContent){
-        try{
-            emailService.saveMailContent(newMailContent);
-            return new ResponseEntity<>(HttpStatus.CREATED);
-        }catch (Exception e){
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
+    @PutMapping("/send-custom-mail")
+    public ResponseEntity<?> sendCustomMail(){
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 }
