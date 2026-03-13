@@ -1,7 +1,9 @@
 package com.GAAC.GAAC.Backend.controller;
 
 import com.GAAC.GAAC.Backend.model.MailContent;
+import com.GAAC.GAAC.Backend.model.dto.request.CustomMailDTO;
 import com.GAAC.GAAC.Backend.model.dto.request.UserSearchCriteriaDTO;
+import com.GAAC.GAAC.Backend.model.dto.response.CustomMailResponseDTO;
 import com.GAAC.GAAC.Backend.model.dto.response.UserMiniResponseDTO;
 import com.GAAC.GAAC.Backend.model.enums.*;
 import com.GAAC.GAAC.Backend.service.EmailService;
@@ -140,6 +142,15 @@ public class AdminController {
     @PutMapping("/send-custom-mail")
     public ResponseEntity<?> sendCustomMail(){
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @Operation(summary = "Send custom email to list of email addresses")
+    @PostMapping("/custom-mail-users")
+    public ResponseEntity<CustomMailResponseDTO> sendEmailToAddresses(
+            @Valid @RequestBody CustomMailDTO request) {
+
+        CustomMailResponseDTO response = emailService.sendEmailToAddresses(request);
+        return ResponseEntity.ok(response);
     }
 
 }
