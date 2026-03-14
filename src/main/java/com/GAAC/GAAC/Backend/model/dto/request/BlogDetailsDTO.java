@@ -12,4 +12,5 @@ public class BlogDetailsDTO {
     private String title;
     private String content;
     private TeamEnum team;
+    private String linkedinUrl;
 }

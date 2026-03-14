@@ -11,6 +11,7 @@ public class BlogMapper {
         dto.setContent(blog.getContent());
         dto.setTeam(blog.getTeam());
         dto.setCreatedAt(blog.getCreatedAt());
+        dto.setLinkedinUrl(blog.getLinkedinUrl());
         dto.setAuthorName(
                 blog.getAuthor() != null ? blog.getAuthor().getName() : "Unknown"
         );

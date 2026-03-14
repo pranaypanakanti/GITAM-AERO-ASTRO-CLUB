@@ -16,4 +16,5 @@ public class BlogResponseDTO {
     private TeamEnum team;
     private Instant createdAt;
     private String authorName;
+    private String linkedinUrl;
 }

@@ -52,6 +52,5 @@ public class User {
     @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @JsonManagedReference
     private List<Blog> blogsList = new ArrayList<>();
-    @Column(nullable=false)
     private Instant createdAt = Instant.now();
 }
