@@ -39,6 +39,7 @@ public class BlogService {
         newBlog.setTitle(blog.getTitle());
         newBlog.setContent(blog.getContent());
         newBlog.setTeam(blog.getTeam());
+        newBlog.setLinkedinUrl(blog.getLinkedinUrl());
         blogRepo.save(newBlog);
         user.getBlogsList().add(newBlog);
     }
@@ -78,6 +79,7 @@ public class BlogService {
             old.setTitle(newBlog.getTitle() != null && !newBlog.getTitle().isEmpty() ? newBlog.getTitle() : old.getTitle());
             old.setContent(newBlog.getContent() != null && !newBlog.getContent().isEmpty() ? newBlog.getContent() : old.getContent());
             old.setTeam(newBlog.getTeam() != null ? newBlog.getTeam() : old.getTeam());
+            old.setLinkedinUrl(newBlog.getLinkedinUrl() != null && !newBlog.getLinkedinUrl().isEmpty() ? newBlog.getLinkedinUrl() : old.getLinkedinUrl());
             blogRepo.save(old);
         }catch (Exception e) {
             throw new RuntimeException("Failed to update blog", e);

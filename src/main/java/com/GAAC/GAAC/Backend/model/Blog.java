@@ -32,6 +32,7 @@ public class Blog {
     @JoinColumn(name = "author_id")
     @JsonBackReference
     private User author;
+    private String linkedinUrl;
     @Column(nullable=false)
     private Instant createdAt = Instant.now();
 }
