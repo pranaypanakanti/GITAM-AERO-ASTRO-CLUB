@@ -13,7 +13,6 @@ import jakarta.validation.constraints.Pattern;
 public class UserDetailsDTO {
     @NotBlank
     private String name;
-    @NotBlank
     @Pattern(
             regexp = "^[0-9]{10}$",
             message = "Collage id must contain exactly 10 digits"

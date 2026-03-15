@@ -29,7 +29,6 @@ public class Achievement {
     @Enumerated(EnumType.STRING)
     private TeamEnum team;
     private String imageUrl;
-    private String articleUrl;
     @Column(nullable=false)
     private Instant createdAt = Instant.now();
     @Enumerated(EnumType.STRING)
