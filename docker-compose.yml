@@ -30,9 +30,6 @@ services:
       SPRING_DATASOURCE_USERNAME: gaac_user
       SPRING_DATASOURCE_PASSWORD: gaac_password
 
-      MAIL_USER: projectpranay23@gmail.com
-      MAIL_PASS_KEY: REDACTED
-
       SERVER_ADDRESS: 0.0.0.0
 
       SPRINGDOC_API_DOCS_PATH: /v3/api-docs
